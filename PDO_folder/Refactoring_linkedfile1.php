@@ -2,7 +2,7 @@
 
 function fetchAllTasks($pdo)
 {
-	$statement = $pdo->prepare('select * from todos');
+    $statement = $pdo->prepare('select * from todos');
 
     $statement->execute();
 
@@ -13,9 +13,9 @@ function fetchAllTasks($pdo)
 
 function dd($data) 
 {
-	echo '<pre>';
+    echo '<pre>';
 
-	die(var_dump($data));
+    die(var_dump($data));
 
-	echo '</pre>';
+    echo '</pre>';
 }
