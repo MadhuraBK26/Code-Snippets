@@ -10,7 +10,7 @@ if (isset($_GET['question'])) {
     $input = 1;
 }
 
-echo $input;
+//echo $input;
 $question1 = array(
     
     
