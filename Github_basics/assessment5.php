@@ -14,7 +14,7 @@ if (isset($_GET['question'])) {
 $question1 = array(
     
     
-    array(
+    //array(
         'question_text' => '1.Which of the following is not a type of constructor',
         'answer_text' => '(1)Parametrized constructor',
         'correct_answer' => false,
