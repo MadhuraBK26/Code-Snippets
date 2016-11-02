@@ -10,11 +10,21 @@ if (isset($_GET['question'])) {
     $input = 1;
 }
 
-//echo $input;
+<<<<<<< HEAD
+
+echo $input;
+
 $question1 = array(
     
     
-    //array(
+    array(
+
+echo $input;
+$question1 = array(
+    
+    
+    array(
+>>>>>>> 8b5a8341bf9a88403d89645f1293fe76e2bcfca3
         'question_text' => '1.Which of the following is not a type of constructor',
         'answer_text' => '(1)Parametrized constructor',
         'correct_answer' => false,

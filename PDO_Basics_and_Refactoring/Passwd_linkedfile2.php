@@ -1,5 +1,7 @@
 <?php
 
+$config = require 'Passwd_linkedfile1.php';
+
 require 'Refactoring_linkedfile4.php';
 
 require 'Refactoring_linkedfile2.php';
@@ -8,6 +10,6 @@ require 'Refactoring_linkedfile2.php';
 
 return new QueryBuilder(
 
-	Connection::make()
+	Connection::make($config['database'])
 
 );
