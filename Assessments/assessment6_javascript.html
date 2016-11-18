@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <h3 style="color:fuchsia;">To display months of an year</h3>
+    <style>
+        h3 {
+            text-shadow: -6px 2px 2px #999;
+            font-family: "Corben";
+           }
+    </style>
+</head>
+</head>
+
+
+
+
+<body>
+    <P id="months">
+        <button onclick="Function1()">Months</button>
+        <h3 style="color:crimson;"><i>To access individual elements in an array</h3>
+
+        <button  onclick="displayArray()">The individual elements are:</button>
+        <P id="arrayelements1"></P>
+        <P id="arrayelements2"></P>
+  
+        <h3 style="color:blueviolet"><i>To display current time</h3>
+        <p id="demo1">
+        <button onclick="displayDate()">The time is:</button>
+
+        <h3 style="color:darkred;">Form to check whether a field is empty</h3>
+ 
+        <form name="form1"  method="post" action="success.html">
+        <tr>
+
+    <td><LABEL for="firstname">First Name:<sup style="color:#F00">*</sup> </LABEL></td>
+
+           <td><INPUT type="text" id="firstname"></td><td width="200px"><i style="color:red;" id="pointfn"></i></td>
+
+   </tr>
+
+   <tr>
+
+    <td><LABEL for="lastname">Last Name:<sup style="color:#F00">*</sup> </LABEL></td>
+
+    <td><INPUT type="text" id="lastname"></td><td width="200px"><i style="color:red;" id="pointln"></i></td>
+   </tr>
+   <br/><INPUT type="submit" onClick="return validateForm()" value="Submit">
+
+
+<script>
+            
+    function Function1() 
+    {
+        var myArray = new Array();
+        myArray[1] = "January";
+        myArray[2] = "Febraury";
+        myArray[3] = "March";
+        myArray[4] = "April";
+        myArray[5] = "May";
+        myArray[6] = "June";
+        myArray[7] = "July";
+        myArray[8] = "August";
+        myArray[9] = "September";
+        myArray[10] = "October";
+        myArray[11] = "November";
+        myArray[12] = "December";
+
+        for (var i = 1; i < myArray.length; i++) {
+              document.write("Month " + i + " is => " + myArray[i] + "<br />");
+        }
+
+    }
+
+            
+    function displayArray()
+    {
+        var array = [40, 100, 1, 5, 25, 10];
+        document.getElementById("arrayelements1").innerHTML = "0th element is:" + array[0];
+        document.getElementById("arrayelements2").innerHTML = "First element is:" + array[1]; 
+    }
+
+
+    function displayDate() 
+    {
+        var d = new Date();
+        document.getElementById("demo1").innerHTML = d.toDateString();
+    }
+
+
+     
+    function validateForm()
+    {
+        var namepattern=/^[a-zA-Z]+$/
+        var x=document.forms["form1"]["firstname"];
+        if (x.value=="")
+   {
+  
+   document.getElementById('pointfn').innerHTML="Please enter the first name.";
+   x.focus();
+   return false;
+   }
+ 
+ 
+   else if ((!namepattern.test(x.value))) {
+       document.getElementById('pointfn').innerHTML="Please enter only alphabets.";
+       x.value="";
+       x.focus();
+      return false;
+   }
+
+  document.getElementById('pointfn').innerHTML='';
+
+  x=document.forms["form1"]["lastname"];
+
+  if(x.value=="") {
+  document.getElementById('pointln').innerHTML="Please enter the Last name.";
+  x.focus();
+  return false;
+  
+  } else if (!namepattern.test(x.value)) {
+  x.value="";
+  document.getElementById('pointln').innerHTML="Please enter only alphabets.";
+  x.focus();
+  return false;
+ }
+}
+</script>
+
+</body>
+</html>
