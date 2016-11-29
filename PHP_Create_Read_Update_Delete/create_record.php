@@ -11,7 +11,7 @@ if (!empty($_POST)) {
     $noofDaysError   = null;
     $noofCarsError   = null;
     
-    // keep track post values
+
     $name        = $_POST['name'];
     $carNumber   = $_POST['carNumber'];
     $carModel    = $_POST['carModel'];
@@ -83,7 +83,7 @@ if (!empty($_POST)) {
             $totalAmount
         ));
         Database::disconnect();
-        header("Location: Viewpage.php");
+        header("Location: Index.php");
     }
 }
 
@@ -97,8 +97,21 @@ if (!empty($_POST)) {
             text-shadow: -6px 2px 2px #999;
             font-family: "Corben";
     }
+    .button {
+    background-color: #E9967A;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 2px 2px;
+    cursor: pointer;
+}
+.button2 {background-color: #008CBA;}
   </style>
-  <form  action="create_record1.php" method="post">
+  <form  action="create_record.php" method="post">
      <div class=" <?php echo !empty($nameError) ? 'error' : '';?>">
      <table>
      <tr>
@@ -107,6 +120,7 @@ if (!empty($_POST)) {
      <?php if (!empty($nameError)):?>
      <?php echo $nameError;?>
      <?php endif;?>
+     </tr>
      <tr>
 
      <div class="<?php echo !empty($carnumberError) ? 'error' : '';?>">
@@ -122,7 +136,7 @@ if (!empty($_POST)) {
      <div class=" <?php echo !empty($carModelError) ? 'error' : '';?>">
      <td><i><label>Car Model</label></td>
      <td>  <select name ="carModel"  style="max-width:90%" placeholder="Car model" value="<?php echo !empty($carModel) ? $carModel : '';?>"  >
-     <option value="0">Select</option>
+     <option disabled selected value></option>
      <option value="Maruti">Maruti</option>
      <option value="Ford">Ford</option>
      <option value="Volvo">Volvo</option>
@@ -168,8 +182,8 @@ if (!empty($_POST)) {
      </form>
     
     <div class="form-actions">
-    <button type="submit">Create</button>
-    <a class="btn" href="Viewpage.php">Back</a>
+    <button class="button" type="submit">Create</button>
+    <a class="button button2" href="Index.php">Back</a>
     </div>
 </body>
 </html>
