@@ -1,7 +1,10 @@
+<?php 
+include 'database.php';
+?>
 <html>
 </head>
 <body>
-<h3 align="center" style="color:maroon;">Ticket Calculation for Vehicle Parking</h3>
+<h3 align="center" style="color:maroon;"> Vehicle Parking Management</h3>
 <style>
 h3 {
             text-shadow: -6px 2px 2px #999;
@@ -9,7 +12,7 @@ h3 {
    }
  body {
         background-color:#F5DEB3;
-      } 
+      }
  
 </style>
 <table>
@@ -30,18 +33,18 @@ h3 {
   <tbody>
 
   <?php
-    include 'database.php';
+   
     $pdo = Database::connect();
     $sql = 'SELECT * FROM VehicleParking ORDER BY id DESC';
-    foreach ($pdo->query($sql) as $row) {
+    foreach ($pdo->query($sql) as $VehicleParkingrow) {
     echo '<tr>';
-    echo '<td>'. $row['name'] . '</td>';
-    echo '<td>'. $row['carnumber'] . '</td>';
-    echo '<td>'. $row['carmodel'] . '</td>';
-    echo '<td>'. $row['fareperday'] . '</td>';
-    echo '<td>'. $row['noofdays'] . '</td>';
-    echo '<td>'. $row['noofcars'] . '</td>';
-    echo '<td>'. $row['totalamount'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['name'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['carnumber'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['carmodel'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['fareperday'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['noofdays'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['noofcars'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['totalamount'] . '</td>';
     echo '<td width=250>';
     echo '<a class="button" href="View_record.php?id='.$row['id'].'">Read</a>';
     echo ' ';
@@ -56,5 +59,5 @@ h3 {
 </tbody>
 </table>
 <br>
- <a href="create_record.php">Click for Creating a new record</a><br>
+ <a href="create_record.php">Create a new Vehicle Parking slot</a><br>
 </html>
