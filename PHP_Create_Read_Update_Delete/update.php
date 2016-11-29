@@ -6,7 +6,7 @@
     }
 
     if (is_null($id)) {
-        header("Location: Viewpage.php");
+        header("Location: Index.php");
     }
 
 
@@ -75,7 +75,7 @@
             $q = $pdo->prepare($sql);
             $q->execute(array($name,$carNumber,$carModel,$farePerDay,$noofDays,$noofCars,$totalAmount,$id));
             Database::disconnect();
-            header("Location: Viewpage.php");
+            header("Location: Index.php");
         }
 
     } else {
@@ -101,12 +101,28 @@
 
 <html>
 <body>
-<h3 style="color:blueviolet">Update a Customer</h3>
+<h3 style="color:maroon">Update a Customer</h3>
 <style>
  h3 {
             text-shadow: -6px 2px 2px #999;
             font-family: "Corben";
     }
+    .button {
+    background-color: #E9967A;
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    margin: 2px 2px;
+    cursor: pointer;
+}
+.button2 {background-color: #008CBA;}
+ body {
+        background-color:#F5DEB3;} 
+
 </style>
 <form  action="update.php?id=<?php echo $id?>" method="post">
     <div class="control-group <?php echo !empty($nameError)?'error':'';?>">
@@ -133,6 +149,7 @@
   <div class="control-group <?php echo !empty($carmodelError)?'error':'';?>">
   <td><i><label>Car model</label></td>
   <td>  <select name ="carModel"  style="max-width:90%" placeholder="Car model" value="<?php echo !empty($carModel)?$carModel:'';?>"  >
+  <option disabled selected value></option>
   <option value="Maruti">Maruti</option>
   <option value="Ford">Ford</option>
   <option value="Volvo">Volvo</option>
@@ -176,8 +193,8 @@
   </table>
                        
   <div class="form-actions">
-  <button type="submit">Update</button>
- <a class="btn" href="Viewpage.php">Back</a>
+  <button class="button" type="submit">Update</button>
+  <a class="button button2" href="Index.php">Back</a>
 </div>
 </form>
 </div>
