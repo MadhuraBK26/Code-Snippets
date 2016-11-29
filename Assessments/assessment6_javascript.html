@@ -9,14 +9,14 @@
            }
     </style>
 </head>
-</head>
+
 
 
 
 
 <body>
     <P id="months">
-        <button onclick="Function1()">Months</button>
+        <button onclick="displayMonths()">Months</button>
         <h3 style="color:crimson;"><i>To access individual elements in an array</h3>
 
         <button  onclick="displayArray()">The individual elements are:</button>
@@ -32,24 +32,26 @@
         <form name="form1"  method="post" action="success.html">
         <tr>
 
-    <td><LABEL for="firstname">First Name:<sup style="color:#F00">*</sup> </LABEL></td>
+       <td><LABEL for="firstname">First Name:</td><sup style="color:#F00">*</sup> </LABEL></td>
 
            <td><INPUT type="text" id="firstname"></td><td width="200px"><i style="color:red;" id="pointfn"></i></td>
 
-   </tr>
+       </tr>
 
-   <tr>
+       <tr>
 
-    <td><LABEL for="lastname">Last Name:<sup style="color:#F00">*</sup> </LABEL></td>
+       <td><LABEL for="lastname">Last Name:<sup style="color:#F00">*</sup> </LABEL></td>
 
-    <td><INPUT type="text" id="lastname"></td><td width="200px"><i style="color:red;" id="pointln"></i></td>
-   </tr>
-   <br/><INPUT type="submit" onClick="return validateForm()" value="Submit">
+       <td><INPUT type="text" id="lastname"></td><td width="200px"><i style="color:red;" id="pointln"></i></td>
+       </tr>
+       <br/><INPUT type="submit" onClick="return validateForm()" value="Submit">
+       </INPUT>
+       </td>
 
 
 <script>
             
-    function Function1() 
+    function displayMonths() 
     {
         var myArray = new Array();
         myArray[1] = "January";
