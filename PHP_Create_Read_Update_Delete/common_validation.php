@@ -1,7 +1,14 @@
 <?php
 
 require 'database.php';
+error_reporting(1);
 //require 'create_record.php';
+//buildVehicleParking();
+ 
+
+
+ function buildVehicleParking($name,$carNumber, $carModel, $farePerDay, $noofDays, $noofCars, $totalAmount)
+ {
 
 if ( !empty($_POST)) {
     // keep track validation errors
@@ -12,8 +19,6 @@ if ( !empty($_POST)) {
     $farePerDayError=null;
     $noofDaysError=null;
     $noofCarsError=null;*/
-    
-   function  
     $name = $_POST['name'];
     $carNumber = $_POST['carNumber'];
     $carModel = $_POST['carModel'];
@@ -22,7 +27,8 @@ if ( !empty($_POST)) {
     $noofCars = $_POST['noofCars'];
     $totalAmount = $_POST['totalAmount'];
     $totalAmount = $noofDays * $farePerDay * $noofCars;
-    
+
+   
     
     
     // validate input
@@ -67,15 +73,7 @@ if ( !empty($_POST)) {
         $valid  = false;
       }
     // require 'create_record.php';
-    }
-    
-
-      ?>
-
-
- 
-
-
-
-
-  
+  }
+ }
+ buildVehicleParking($name);
+?>
