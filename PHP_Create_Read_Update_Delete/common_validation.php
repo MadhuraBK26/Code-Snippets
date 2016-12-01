@@ -1,14 +1,14 @@
 <?php
-
-require 'database.php';
+//echo 333;
+//exit;
+//require 'database.php';
 error_reporting(1);
 //require 'create_record.php';
 //buildVehicleParking();
  
 
-
- function buildVehicleParking($name,$carNumber, $carModel, $farePerDay, $noofDays, $noofCars, $totalAmount)
- {
+function buildVehicleParking($nameError,$carNumberError,$carModelError,$farePerDayError,$noofDaysError, $noofCarsError)
+{
 
 if ( !empty($_POST)) {
     // keep track validation errors
@@ -27,16 +27,21 @@ if ( !empty($_POST)) {
     $noofCars = $_POST['noofCars'];
     $totalAmount = $_POST['totalAmount'];
     $totalAmount = $noofDays * $farePerDay * $noofCars;
-
+   //
+    //echo "4";
    
     
     
     // validate input
-   $valid = true;
+  $GLOBALS['valid'] = true; 
     if (empty($name) || is_numeric($name)) {
         $nameError = 'Please enter Name in proper format';
+        echo $nameError;
         $valid = false;
+         
       }
+      // return  $nameError;
+
         
         
     
@@ -74,6 +79,10 @@ if ( !empty($_POST)) {
       }
     // require 'create_record.php';
   }
- }
- buildVehicleParking($name);
+
+}
+ buildVehicleParking();
+ //echo 1;
+ 
+
 ?>
