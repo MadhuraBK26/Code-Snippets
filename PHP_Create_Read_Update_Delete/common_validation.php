@@ -1,16 +1,31 @@
 <?php
 //echo 333;
 //exit;
-//require 'database.php';
+require 'database.php';
 error_reporting(1);
 //require 'create_record.php';
 //buildVehicleParking();
+//$valid;
+//if ($_POST) {
+    $_POST['name'];
+    $_POST['carnumber'];
+    $_POST['carmodel'];
+    $_POST['fareperday'];
+    $_POST['noofdays'];
+    $_POST['noofcars'];
+    $_POST['totalamount'];
+    $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
  
 
-function buildVehicleParking($nameError,$carNumberError,$carModelError,$farePerDayError,$noofDaysError, $noofCarsError)
+
+function buildVehicleParking()
 {
 
-if ( !empty($_POST)) {
+  
+  
+    if ( !empty($_POST)) {
+       $valid = true;
+
     // keep track validation errors
 
   /*$nameError=null;
@@ -19,24 +34,19 @@ if ( !empty($_POST)) {
     $farePerDayError=null;
     $noofDaysError=null;
     $noofCarsError=null;*/
-    $name = $_POST['name'];
-    $carNumber = $_POST['carNumber'];
-    $carModel = $_POST['carModel'];
-    $farePerDay = $_POST['farePerDay'];
-    $noofDays = $_POST['noofDays'];
-    $noofCars = $_POST['noofCars'];
-    $totalAmount = $_POST['totalAmount'];
-    $totalAmount = $noofDays * $farePerDay * $noofCars;
+    
    //
-    //echo "4";
+   // echo "4";
    
-    
-    
+   //global $valid;
+   
+  
     // validate input
-  $GLOBALS['valid'] = true; 
-    if (empty($name) || is_numeric($name)) {
-        $nameError = 'Please enter Name in proper format';
-        echo $nameError;
+ // $GLOBALS['valid'] = true; 
+    if (empty($_POST['name'])) {
+        $errorArray['name'] = 'Please enter Name in proper format';
+        //$nameError = 'Please enter Name in proper format';
+        //echo $nameError;
         $valid = false;
          
       }
@@ -45,43 +55,53 @@ if ( !empty($_POST)) {
         
         
     
-     if (empty($carNumber)) {
-        $carNumberError = 'Please enter Car Number';
+     if (empty($_POST['carnumber'])) {
+        $errorArray['carnumber'] = 'Please enter Car Number';
+       // echo  $carNumberError;
         $valid  = false;
       }
         
         
     
-     if (empty($carModel)) {
-        $carModelError = 'Please enter Car Model';
+     if (empty($_POST['carmodel'])) {
+        $errorArray['carmodel'] = 'Please enter Car Model';
+       // echo $carModelError;
         $valid  = false;
       }
         
         
     
-     if (empty($farePerDay) || ($farePerDay <= 0) || is_integer($farePerDay)) {
-        $farePerDayError = 'Please enter Fare per day in proper format';
+     if (empty($_POST['fareperday'])) {
+        $errorArray['fareperday'] = 'Please enter Fare per day in proper format';
+       // echo  $farePerDayError;
         $valid = false;
       }
         
         
     
-     if (empty($noofDays) || ($noofDays <= 0) || is_integer($noofDays)) {
-        $noofDaysError = 'Please enter Number of days in proper format';
+     if (empty($_POST['noofdays']))  {
+        $errorArray['noofdays'] = 'Please enter Number of days in proper format';
+        //echo  $noofDaysError;
         $valid  = false;
       }
         
         
     
-     if (empty($noofCars) || ($noofCars <= 0) || is_integer($noofCars)) {
-        $noofCarsError = 'Please enter number of cars in proper format';
+     if (empty($_POST['noofcars'])) {
+        $errorArray['noofcars'] = 'Please enter number of cars in proper format';
+       // echo $noofCarsError;
         $valid  = false;
       }
     // require 'create_record.php';
-  }
+    //}
 
+      $response['messageList'] = $errorArray;
+      $response['status'] = $valid;
+      return $response;
+  }
 }
- buildVehicleParking();
+
+//buildVehicleParking();
  //echo 1;
  
 
