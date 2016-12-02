@@ -1,8 +1,8 @@
 <?php
-//echo 333;
+//echo 'ste';
 //exit;
 require 'database.php';
-error_reporting(1);
+//error_reporting(0);
 //require 'create_record.php';
 //buildVehicleParking();
 //$valid;
@@ -13,17 +13,17 @@ error_reporting(1);
     $_POST['fareperday'];
     $_POST['noofdays'];
     $_POST['noofcars'];
-    $_POST['totalamount'];
-    $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
+    
+    
  
 
 
-function buildVehicleParking()
+function buildVehicleParking($POSTArray)
 {
 
   
   
-    if ( !empty($_POST)) {
+    if ( !empty($POSTArray)) {
        $valid = true;
 
     // keep track validation errors
@@ -43,7 +43,8 @@ function buildVehicleParking()
   
     // validate input
  // $GLOBALS['valid'] = true; 
-    if (empty($_POST['name'])) {
+    //echo "1";
+    if (empty($POSTArray['name'])) {
         $errorArray['name'] = 'Please enter Name in proper format';
         //$nameError = 'Please enter Name in proper format';
         //echo $nameError;
@@ -55,7 +56,7 @@ function buildVehicleParking()
         
         
     
-     if (empty($_POST['carnumber'])) {
+     if (empty($POSTArray['carnumber'])) {
         $errorArray['carnumber'] = 'Please enter Car Number';
        // echo  $carNumberError;
         $valid  = false;
@@ -63,7 +64,7 @@ function buildVehicleParking()
         
         
     
-     if (empty($_POST['carmodel'])) {
+     if (empty($POSTArray['carmodel'])) {
         $errorArray['carmodel'] = 'Please enter Car Model';
        // echo $carModelError;
         $valid  = false;
@@ -71,7 +72,7 @@ function buildVehicleParking()
         
         
     
-     if (empty($_POST['fareperday'])) {
+     if (empty($POSTArray['fareperday'])) {
         $errorArray['fareperday'] = 'Please enter Fare per day in proper format';
        // echo  $farePerDayError;
         $valid = false;
@@ -79,7 +80,7 @@ function buildVehicleParking()
         
         
     
-     if (empty($_POST['noofdays']))  {
+     if (empty($POSTArray['noofdays']))  {
         $errorArray['noofdays'] = 'Please enter Number of days in proper format';
         //echo  $noofDaysError;
         $valid  = false;
@@ -87,7 +88,7 @@ function buildVehicleParking()
         
         
     
-     if (empty($_POST['noofcars'])) {
+     if (empty($POSTArray['noofcars'])) {
         $errorArray['noofcars'] = 'Please enter number of cars in proper format';
        // echo $noofCarsError;
         $valid  = false;
