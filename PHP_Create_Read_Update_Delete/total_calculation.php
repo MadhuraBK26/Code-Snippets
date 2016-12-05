@@ -1,7 +1,12 @@
- <?php
- function calculateTotal()
+<?php
+
+ function calculateTotal($fareperday,$noofdays,$noofcars)
  {
-     $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
-     return  $_POST['totalamount'];
- }
+ 	$noofdays = $_POST['noofdays'];
+    $fareperday = $_POST['fareperday'];
+    $noofcars = $_POST['noofcars'];
+    $total = $_POST['totalamount'];
+    $total =  $noofdays *  $fareperday *  $noofcars;
+    return  $total;
+}
  ?>
