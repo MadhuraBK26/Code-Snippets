@@ -1,9 +1,10 @@
 <?php
+class VehicleParking
+{
 
-require 'database.php';
 
-    
- function buildVehicleParking($POSTArray)
+
+public  function buildVehicleParking($POSTArray)
 {
 
   if ( !empty($POSTArray)) {
@@ -46,6 +47,7 @@ require 'database.php';
       $response['status'] = $valid;
       return $response;
   }
+}
 }
 
 
