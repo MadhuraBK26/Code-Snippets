@@ -1,19 +1,30 @@
 <?php
 
-include 'common_validation.php';
-//echo "test";exit;
-//exit;
- $response = buildVehicleParking($_POST);
-
-
+//ob_start();
+require 'database.php';
+//include 'common_validation.php';
+require 'total_calculation.php';
+require 'common_validation.php'; 
  
- if ($response['status']) {
+ $parking = new VehicleParking();
+ $response = $parking->buildVehicleParking($_POST);
+//  $response = buildVehicleParking($_POST);
+ 
+
+
+
+if ($response['status']) {
+
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-         $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
+        $fareperday = $_POST['fareperday'];
+        $noofdays =  $_POST['noofdays'];
+        $noofcars =  $_POST['noofcars'];
+
+       //  $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
       $sql = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
-        //echo $name;exit;
         $q = $pdo->prepare($sql);
+       $total = calculateTotal($fareperday,$noofdays,$noofcars);
         $q->execute(array(
             $_POST['name'],
             $_POST['carnumber'],
@@ -21,22 +32,17 @@ include 'common_validation.php';
             $_POST['fareperday'],
             $_POST['noofdays'],
             $_POST['noofcars'],
-            $_POST['totalamount']
+            $total
         ));
         Database::disconnect();
         header("Location: Index.php");
-       // exit();
+       
     }
-  
-  
-
-
-
-?>
+  ?>
 
 <html>
 <head>
- <h3 style="color:maroon">Ticket Calculation:Insert values</h3>
+ <h3 style="color:maroon">Ticket Calculation for Vehicle Parking:Insert values</h3>
  <style>
  h3 {
             text-shadow: -6px 2px 2px #999;
