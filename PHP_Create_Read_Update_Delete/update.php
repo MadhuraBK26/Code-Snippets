@@ -1,5 +1,9 @@
 <?php
+
+ob_start();
+require 'database.php';
 require 'common_validation.php';
+require 'total_calculation.php';
 
 
     if ( !empty($_GET['id'])) {
@@ -9,30 +13,32 @@ require 'common_validation.php';
     if (is_null($id)) {
         header("Location: Index.php");
     }
-  //print_r($_POST);exit;
+ 
    if ($_POST) {
-        
-        $response = buildVehicleParking($_POST);
-        //print_r($response,$_POST);
 
+     $parking = new VehicleParking();
+     $response = $parking->buildVehicleParking($_POST);
+        
+       // $response = buildVehicleParking($_POST);
+       
         // keep track validation errors
         
         if ($response['status'])  {
             $pdo = Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
+          //  $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
             $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
             $q = $pdo->prepare($sql);
-            $q->execute(array($_POST['name'],$_POST['carnumber'],$_POST['carmodel'],$_POST['fareperday'],$_POST['noofdays'],$_POST['noofcars'],$_POST['totalamount'],$id));
+            $total = calculateTotal($fareperday,$noofdays,$noofcars);
+            $q->execute(array($_POST['name'],$_POST['carnumber'],$_POST['carmodel'],$_POST['fareperday'],$_POST['noofdays'],$_POST['noofcars'],$total,$id));
             Database::disconnect();
             header("Location: Index.php");
         }
     
 
-    } //else {
+    } 
 
-            //$response = null;
            $pdo = Database::connect();
            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
            $sql = "SELECT * FROM VehicleParking where id = ?";
@@ -46,21 +52,15 @@ require 'common_validation.php';
            $_POST['fareperday'] = $data['fareperday'];
            $_POST['noofdays'] = $data['noofdays'];
            $_POST['noofcars'] = $data['noofcars'];
-//           $_POST['totalamount'] = $data['totalamount'];
 
         Database::disconnect();
-    // }
+    
 
-       // echo"<pre>"; print_r($response);exit;
 ?>
-
-
-
-
 
 <html>
 <body>
-<h3 style="color:maroon">Update a Customer</h3>
+<h3 style="color:maroon">Update Ticket calculation for Vehicle Parking</h3>
  <style>
  h3 {
             text-shadow: -6px 2px 2px #999;
@@ -83,7 +83,8 @@ require 'common_validation.php';
  </head>
  <style>
  body {
-        background-color:#F5DEB3;} 
+        background-color:#F5DEB3;
+      } 
 </style>
 <form  action="update.php?id=<?php echo $id?>" method="post">
  <table>
@@ -150,9 +151,9 @@ require 'common_validation.php';
      </table>
     <div class="form-actions">
     <input class="button" type="submit" />
-    <a class="button button2" href="Index.php">Back</a>
+    <a class="button button2" href="Index.php" <?php echo "Record updated"?>>Back</a>
     </div>
-     </form>
+    </form>
     
 </body>
 </html>
