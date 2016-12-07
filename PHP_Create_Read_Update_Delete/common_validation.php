@@ -1,13 +1,20 @@
 <?php
 class VehicleParking
 {
-     public  function buildVehicleParking($POSTArray)
+  /**
+  * Performs the validation
+  *
+  * @param response['messagelist']  Array structure to display the error messages.
+  *
+  * @return int Returns the Error messages.
+  */
+     public  function validateVehicleParking($POSTArray)
      {
 
          if ( !empty($POSTArray)) {
             $valid = true;
 
-    // keep track validation error
+    /** keep track validation errors */
          if (empty($POSTArray['name'])) {
              $errorArray['name'] = 'Please enter Name in proper format';
              $valid = false;
