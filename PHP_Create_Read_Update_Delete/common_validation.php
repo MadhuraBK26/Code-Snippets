@@ -6,7 +6,7 @@ class VehicleParking
   *
   * @param response['messagelist']  Array structure to display the error messages.
   *
-  * @return int Returns the Error messages.
+  * @return int Returns the Array.
   */
      public  function validateVehicleParking($POSTArray)
      {
@@ -15,6 +15,7 @@ class VehicleParking
             $valid = true;
 
     /** keep track validation errors */
+
          if (empty($POSTArray['name'])) {
              $errorArray['name'] = 'Please enter Name in proper format';
              $valid = false;
