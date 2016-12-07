@@ -1,19 +1,25 @@
 <?php
 
-//ob_start();
 require 'database.php';
-//include 'common_validation.php';
 require 'total_calculation.php';
 require 'common_validation.php'; 
  
- $parking = new VehicleParking();
- $response = $parking->buildVehicleParking($_POST);
-//  $response = buildVehicleParking($_POST);
  
+ /** Insert data*/
 
+ class InsertData
+ {
+    private $response;
+    public function __construct($response)
+    {
+        $this->response = $response;
+    }
 
+public function insertVehicleParking()
+{
 
 if ($response['status']) {
+
 
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -21,10 +27,10 @@ if ($response['status']) {
         $noofdays =  $_POST['noofdays'];
         $noofcars =  $_POST['noofcars'];
 
-       //  $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
-      $sql = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
+       
+        $sql = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
         $q = $pdo->prepare($sql);
-       $total = calculateTotal($fareperday,$noofdays,$noofcars);
+        $total = calculateTotal($fareperday,$noofdays,$noofcars);
         $q->execute(array(
             $_POST['name'],
             $_POST['carnumber'],
@@ -36,8 +42,17 @@ if ($response['status']) {
         ));
         Database::disconnect();
         header("Location: Index.php");
-       
     }
+   
+       
+    
+}
+}
+$parking = new VehicleParking();
+ $response = $parking->validateVehicleParking($_POST);
+
+$insert = new InsertData();
+$response1 = $insert->insertVehicleParking();
   ?>
 
 <html>
@@ -67,9 +82,6 @@ if ($response['status']) {
  body {
         background-color:#F5DEB3;} 
 </style>
-
- 
-
 
  <form  action="create_record.php" method="post">
   <div class=" <?php echo !empty($response['messageList']['name'])?'error':'';?>">
