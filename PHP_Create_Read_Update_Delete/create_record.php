@@ -10,12 +10,12 @@ require 'common_validation.php';
  class InsertData
  {
     private $response;
-    public function __construct($response)
+    public function __construct()
     {
         $this->response = $response;
     }
 
-public function insertVehicleParking()
+public function insertVehicleParking($response, $inputData)
 {
 
 if ($response['status']) {
@@ -23,21 +23,21 @@ if ($response['status']) {
 
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $fareperday = $_POST['fareperday'];
-        $noofdays =  $_POST['noofdays'];
-        $noofcars =  $_POST['noofcars'];
+        $fareperday = $inputData['fareperday'];
+        $noofdays =  $inputData['noofdays'];
+        $noofcars =  $inputData['noofcars'];
 
        
         $sql = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
         $q = $pdo->prepare($sql);
         $total = calculateTotal($fareperday,$noofdays,$noofcars);
         $q->execute(array(
-            $_POST['name'],
-            $_POST['carnumber'],
-            $_POST['carmodel'],
-            $_POST['fareperday'],
-            $_POST['noofdays'],
-            $_POST['noofcars'],
+            $inputData['name'],
+            $inputData['carnumber'],
+            $inputData['carmodel'],
+            $inputData['fareperday'],
+            $inputData['noofdays'],
+            $inputData['noofcars'],
             $total
         ));
         Database::disconnect();
@@ -51,8 +51,9 @@ if ($response['status']) {
 $parking = new VehicleParking();
  $response = $parking->validateVehicleParking($_POST);
 
+
 $insert = new InsertData();
-$response1 = $insert->insertVehicleParking();
+$insertResponse=$insert->insertVehicleParking($response, $_POST);
   ?>
 
 <html>
