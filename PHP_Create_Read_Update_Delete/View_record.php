@@ -5,23 +5,30 @@
         $id = $_REQUEST['id'];
     }
     
-    if (is_null($id)) {
-        header("Location: Index.php");
-    } else {
-        $pdo = Database::connect();
+
+class readData
+{  
+    public $id;
+    
+    public function readVehicleParking($id)
+{
+    $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql = "SELECT * FROM VehicleParking where id = ?";
         $q = $pdo->prepare($sql);
         $q->execute(array($id));
         $data = $q->fetch(PDO::FETCH_ASSOC);
         Database::disconnect();
-    }
+}
+}
+$read = new readData();
+ $readResponse = $read->readVehicleParking($id);
 ?>
  
 <!DOCTYPE html>
 
     
-<h3 style="color:blueviolet">Read a Customer</h3>
+<h3 style="color:blueviolet">Read Vehicle Parking Entry</h3>
 <style>
 body {
         background-color:#F5DEB3;}

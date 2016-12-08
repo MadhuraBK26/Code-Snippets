@@ -6,7 +6,7 @@ require 'total_calculation.php';
 //require 'create_record.php';
 
 
-    if ( !empty($_GET['id'])) {
+    if ( !empty($_REQUEST['id'])) {
         $id = $_REQUEST['id'];
     }
 
@@ -17,52 +17,55 @@ require 'total_calculation.php';
 
  class updateData
  {
-    private $response;
+    
+    private $pdo;
+
     public function __construct()
     {
-        $this->response = $response;
+        $this->pdo = Database::connect();
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
-    function updateVehicleParking($response)
+
+    function getVParking($id)
     {
-    if ($_POST) {
-       
-       
-        /** keep track validation errors  */
+        $this->pdo = Database::connect();
         
-         if ($response['status'])  {
-            $pdo = Database::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
-            $q = $pdo->prepare($sql);
-           // $total = calculateTotal($fareperday,$noofdays,$noofcars);
-            $q->execute(array($_POST['name'],$_POST['carnumber'],$_POST['carmodel'],$_POST['fareperday'],$_POST['noofdays'],$_POST['noofcars'],$total,$id));
-            Database::disconnect();
-            header("Location: Index.php");
-        }
-     } 
-            $pdo = Database::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "SELECT * FROM VehicleParking where id = ?";
-            $q = $pdo->prepare($sql);
-            $q->execute(array($id));
-            $data = $q->fetch(PDO::FETCH_ASSOC);
-           //print_r($data);exit;
-            $_POST['name'] = $data['name'];
-            $_POST['carnumber'] = $data['carnumber'];
-            $_POST['carmodel'] = $data['carmodel'];
-            $_POST['fareperday'] = $data['fareperday'];
-            $_POST['noofdays'] = $data['noofdays'];
-            $_POST['noofcars'] = $data['noofcars'];
-            Database::disconnect();
-        }
+        $sql = "SELECT * FROM VehicleParking where id = ?";
+        $q = $this->pdo->prepare($sql);
+        $q->execute(array($id));
+        $data = $q->fetch(PDO::FETCH_ASSOC);  
+        return $data;  
     }
-       $parking = new VehicleParking();
+   
+    function updateVehicleParking($inputdata)
+    {
+        $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
+        $q = $this->pdo->prepare($sql);
+        $total = calculateTotal($inputdata['fareperday'],$inputdata['noofdays'],$inputdata['noofcars']);
+        $q->execute(array($inputdata['name'],$inputdata['carnumber'],$inputdata['carmodel'],$inputdata['fareperday'],$inputdata['noofdays'],$inputdata['noofcars'],$total,$inputdata['id']));
+        return true;
+    }
+ }
+
+    $update = new updateData();
+    if(isset($_GET['id'])){
+        $data = $update->getVParking($id);
+        $input['name'] = $data['name'];
+        $input['carnumber'] = $data['carnumber'];
+        $input['carmodel'] = $data['carmodel'];
+        $input['fareperday'] = $data['fareperday'];
+        $input['noofdays'] = $data['noofdays'];
+        $input['noofcars'] = $data['noofcars'];
+    }
+
+    if($_POST){
+        $parking = new VehicleParking();
        $response = $parking->validateVehicleParking($_POST);
-
-       $update = new updateData;
-       $updateResponse=$insert->updateVehicleParking($response);
-
-    
+       if($response['status']){
+          $updateResponse=$update->updateVehicleParking($_POST);
+       }
+       header("Location:Index.php");
+   }
 ?>
 
 <html>
@@ -93,11 +96,12 @@ require 'total_calculation.php';
         background-color:#F5DEB3;
       } 
 </style>
-<form  action="update.php?id=<?php echo $id?>" method="post">
+<form  action="update.php" method="post">
+    <input type="hidden" name="id" value="<?php echo $id ?>"
  <table>
      <tr>
      <td><i> <label>Name</label></td>
-     <td><input name="name" type="text"  placeholder="Name" value="<?php echo !empty ($_POST['name']) ? ($_POST['name']) : '';?>">
+     <td><input name="name" type="text"  placeholder="Name" value="<?php echo !empty ($input['name']) ? ($input['name']) : '';?>">
      <?php if (isset($response['messageList']['name'])):?>
      <?php echo $response['messageList']['name'];?>
      <?php endif;?>
@@ -105,7 +109,7 @@ require 'total_calculation.php';
      <tr>
 
      <td><i> <label >Car Number</label></td>
-     <td><input name="carnumber" type="text" placeholder="Car number" value="<?php echo !empty ($_POST['carnumber'])? ($_POST['carnumber']): '';?>">
+     <td><input name="carnumber" type="text" placeholder="Car number" value="<?php echo !empty ($input['carnumber'])? ($input['carnumber']): '';?>">
      <?php if (isset($response['messageList']['carnumber'])):?>
      <?php echo $response['messageList']['carnumber'];?>
      <?php endif;?>
@@ -115,7 +119,7 @@ require 'total_calculation.php';
 
   
      <td><i><label>Car Model</label></td>
-     <td>  <select name ="carmodel"  style="max-width:90%" placeholder="Car model" value="<?php echo !empty( $_POST['carmodel']) ?  ($_POST['carmodel']) : '';?>"  >
+     <td>  <select name ="carmodel"  style="max-width:90%" placeholder="Car model" value="<?php echo !empty( $input['carmodel']) ?  ($input['carmodel']) : '';?>"  >
      <option disabled selected value>Select</option>
      <option value="Maruti">Maruti</option>
      <option value="Ford">Ford</option>
@@ -130,7 +134,7 @@ require 'total_calculation.php';
                       
      <tr>
      <td><i><label>Fare per day</label></td>
-     <td> <input name="fareperday" type="text"  placeholder="Fare per day" value="<?php echo !empty($_POST['fareperday']) ? ($_POST['fareperday']) : '';?>">
+     <td> <input name="fareperday" type="text"  placeholder="Fare per day" value="<?php echo !empty($input['fareperday']) ? ($input['fareperday']) : '';?>">
      <?php if (isset($response['messageList']['fareperday'])):?>
      <?php echo $response['messageList']['fareperday'];?>
      <?php endif;?>
@@ -139,7 +143,7 @@ require 'total_calculation.php';
      <tr>
 
      <td><i><label>No of days</label></td>
-     <td> <input name="noofdays" type="text"  placeholder="No of days" value="<?php echo !empty($_POST['noofdays']) ?  ($_POST['noofdays']) : '';?>">
+     <td> <input name="noofdays" type="text"  placeholder="No of days" value="<?php echo !empty($input['noofdays']) ?  ($input['noofdays']) : '';?>">
      <?php if (isset($response['messageList']['noofdays'])):?>
      <?php echo $response['messageList']['noofdays']; ?>
      <?php endif;?>
@@ -148,7 +152,7 @@ require 'total_calculation.php';
      <tr>
 
      <td><i> <label>No of cars</label></td>
-     <td>  <input name="noofcars" type="text"  placeholder="No of cars" value="<?php echo !empty($_POST['noofcars']) ?  ($_POST['noofcars']) : '';?>">
+     <td>  <input name="noofcars" type="text"  placeholder="No of cars" value="<?php echo !empty($input['noofcars']) ?  ($input['noofcars']) : '';?>">
      <?php if (isset($response['messageList']['noofcars'])):?>
      <?php echo $response['messageList']['noofcars'];;?>
      <?php endif;?>
@@ -157,7 +161,7 @@ require 'total_calculation.php';
      <tr>
      </table>
     <div class="form-actions">
-    <input class="button" type="submit" />
+    <input class="button" type="submit" name="submit" value="Submit" />
     <a class="button button2" href="Index.php" <?php echo "Record updated"?>>Back</a>
     </div>
     </form>
