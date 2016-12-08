@@ -1,9 +1,9 @@
 <?php
 
-ob_start();
 require 'database.php';
 require 'common_validation.php';
 require 'total_calculation.php';
+//require 'create_record.php';
 
 
     if ( !empty($_GET['id'])) {
@@ -13,49 +13,56 @@ require 'total_calculation.php';
     if (is_null($id)) {
         header("Location: Index.php");
     }
- 
-   if ($_POST) {
 
-     $parking = new VehicleParking();
-     $response = $parking->buildVehicleParking($_POST);
-        
-       // $response = buildVehicleParking($_POST);
+
+ class updateData
+ {
+    private $response;
+    public function __construct()
+    {
+        $this->response = $response;
+    }
+    function updateVehicleParking($response)
+    {
+    if ($_POST) {
        
-        // keep track validation errors
+       
+        /** keep track validation errors  */
         
-        if ($response['status'])  {
+         if ($response['status'])  {
             $pdo = Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-          //  $_POST['totalamount'] =  $_POST['noofdays'] *  $_POST['fareperday'] *  $_POST['noofcars'];
             $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
             $q = $pdo->prepare($sql);
-            $total = calculateTotal($fareperday,$noofdays,$noofcars);
+           // $total = calculateTotal($fareperday,$noofdays,$noofcars);
             $q->execute(array($_POST['name'],$_POST['carnumber'],$_POST['carmodel'],$_POST['fareperday'],$_POST['noofdays'],$_POST['noofcars'],$total,$id));
             Database::disconnect();
             header("Location: Index.php");
         }
-    
-
-    } 
-
-           $pdo = Database::connect();
-           $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-           $sql = "SELECT * FROM VehicleParking where id = ?";
-           $q = $pdo->prepare($sql);
-           $q->execute(array($id));
-           $data = $q->fetch(PDO::FETCH_ASSOC);
+     } 
+            $pdo = Database::connect();
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT * FROM VehicleParking where id = ?";
+            $q = $pdo->prepare($sql);
+            $q->execute(array($id));
+            $data = $q->fetch(PDO::FETCH_ASSOC);
            //print_r($data);exit;
-           $_POST['name'] = $data['name'];
-           $_POST['carnumber'] = $data['carnumber'];
-           $_POST['carmodel'] = $data['carmodel'];
-           $_POST['fareperday'] = $data['fareperday'];
-           $_POST['noofdays'] = $data['noofdays'];
-           $_POST['noofcars'] = $data['noofcars'];
+            $_POST['name'] = $data['name'];
+            $_POST['carnumber'] = $data['carnumber'];
+            $_POST['carmodel'] = $data['carmodel'];
+            $_POST['fareperday'] = $data['fareperday'];
+            $_POST['noofdays'] = $data['noofdays'];
+            $_POST['noofcars'] = $data['noofcars'];
+            Database::disconnect();
+        }
+    }
+       $parking = new VehicleParking();
+       $response = $parking->validateVehicleParking($_POST);
 
-        Database::disconnect();
+       $update = new updateData;
+       $updateResponse=$insert->updateVehicleParking($response);
+
     
-
 ?>
 
 <html>
