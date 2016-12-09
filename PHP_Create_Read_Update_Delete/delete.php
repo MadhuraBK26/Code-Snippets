@@ -1,26 +1,20 @@
 <?php
-    require 'database.php';
+    //require 'database.php';
+//require 'create_record.php';
+require 'common_classfile.php';
 
      
     if ( !empty($_GET['id'])) {
         $id = $_REQUEST['id'];
     }
-    
-     
+
       if ( !empty($_POST)) {
-        // keep track post values
-        $id = $_POST['id'];
-         
-        // delete data
-        $pdo = Database::connect();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "DELETE FROM VehicleParking  WHERE id = ?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($id));
-        Database::disconnect();
-        header("Location: Index.php");
-         
-    }
+         $id = $_POST['id'];
+         $application = new  vehicleParkingApplication();
+          $deleteResponse = $application->deleteVehicleParking($id);
+          if($deleteResponse) header("Location:Ind1.php");
+      }
+    
 ?>
  
 <html>
@@ -48,11 +42,11 @@
         background-color:#F5DEB3;} 
 
 </style>
-    <form  action="delete.php" method="post">
+    <form  action="del1.php" method="post">
     <input type="hidden" name="id" value="<?php echo $id;?>"/>
     <p class="alert alert-error">Are you sure to delete ?</p>
     <div class="form-actions">
     <button class="button" type="submit">Yes</button>
-     <a class="button button2" href="Index.php">No</a>
+     <a class="button button2" href="Ind1.php">No</a>
 </div>
 </html>
