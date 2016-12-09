@@ -1,28 +1,20 @@
 <?php
-    require 'database.php';
-
-    if ( !empty($_GET['id'])) {
+    require 'common_classfile.php';
+// if ( !empty($_GET['id'])) {
+     if(isset($_GET['id'])){
         $id = $_REQUEST['id'];
-    }
-    
+         $application = new vehicleParkingApplication();
+        $data = $application->getVParking($id);
+        print_r($readResponse);
+        $input['name'] = $readResponse['name'];
+        $input['carnumber'] = $readResponse['carnumber'];
+        $input['carmodel'] = $readResponse['carmodel'];
+        $input['fareperday'] = $readResponse['fareperday'];
+        $input['noofdays'] = $readResponse['noofdays'];
+        $input['noofcars'] = $readResponse['noofcars'];
+ 
+ }
 
-class readData
-{  
-    public $id;
-    
-    public function readVehicleParking($id)
-{
-    $pdo = Database::connect();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT * FROM VehicleParking where id = ?";
-        $q = $pdo->prepare($sql);
-        $q->execute(array($id));
-        $data = $q->fetch(PDO::FETCH_ASSOC);
-        Database::disconnect();
-}
-}
-$read = new readData();
- $readResponse = $read->readVehicleParking($id);
 ?>
  
 <!DOCTYPE html>
@@ -81,7 +73,7 @@ body {
     <br>
                       
     <div class="form-actions">
-    <a class="button" href="Index.php">Back</a>
+    <a class="button" href="Ind1.php">Back</a>
     </div>
 </body>
 </html>
