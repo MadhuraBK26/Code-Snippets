@@ -1,61 +1,20 @@
 <?php
+ob_start();
+require 'common_classfile.php';
+if(isset($_POST)){
+  $application = new  vehicleParkingApplication();
+  $response = $application->validateVehicleParking($_POST);
+  if($response['status']){
+    $resp = $application->insertVehicleParking($_POST);
+    if($resp) header("Location:Ind1.php");
+  }
 
-require 'database.php';
-require 'total_calculation.php';
-require 'common_validation.php'; 
- 
- 
+} 
+
+
  /** Insert data*/
 
- class InsertData
- {
-    private $response;
-    public function __construct()
-    {
-        $this->response = $response;
-    }
-
-public function insertVehicleParking($response, $inputData)
-{
-
-if ($response['status']) {
-
-
-        $pdo = Database::connect();
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $fareperday = $inputData['fareperday'];
-        $noofdays =  $inputData['noofdays'];
-        $noofcars =  $inputData['noofcars'];
-
-       
-        $sql = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
-        $q = $pdo->prepare($sql);
-        $total = calculateTotal($fareperday,$noofdays,$noofcars);
-        $q->execute(array(
-            $inputData['name'],
-            $inputData['carnumber'],
-            $inputData['carmodel'],
-            $inputData['fareperday'],
-            $inputData['noofdays'],
-            $inputData['noofcars'],
-            $total
-        ));
-        Database::disconnect();
-        header("Location: Index.php");
-    }
-   
-       
-    
-}
-}
-$parking = new VehicleParking();
- $response = $parking->validateVehicleParking($_POST);
-
-
-$insert = new InsertData();
-$insertResponse=$insert->insertVehicleParking($response, $_POST);
-  ?>
-
+ ?>
 <html>
 <head>
  <h3 style="color:maroon">Ticket Calculation for Vehicle Parking:Insert values</h3>
@@ -84,7 +43,7 @@ $insertResponse=$insert->insertVehicleParking($response, $_POST);
         background-color:#F5DEB3;} 
 </style>
 
- <form  action="create_record.php" method="post">
+ <form  action="cre1.php" method="post">
   <div class=" <?php echo !empty($response['messageList']['name'])?'error':'';?>">
      <table>
      <tr>
@@ -152,17 +111,7 @@ $insertResponse=$insert->insertVehicleParking($response, $_POST);
      </form>
       <div class="form-actions">
     <button class="button" type="submit">Create</button>
-    <a class="button button2" href="Index.php">Back</a>
+    <a class="button button2" href="Ind1.php">Back</a>
     </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
