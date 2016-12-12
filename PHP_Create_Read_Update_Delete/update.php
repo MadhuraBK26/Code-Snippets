@@ -1,72 +1,36 @@
 <?php
+ob_start();
+require 'common_classfile.php';
 
-require 'database.php';
-require 'common_validation.php';
-require 'total_calculation.php';
-//require 'create_record.php';
+if (!empty($_REQUEST['id'])) {
+    $id = $_REQUEST['id'];
+}
 
+if (is_null($id)) {
+    header("Location: Index.php");
+}
 
-    if ( !empty($_REQUEST['id'])) {
-        $id = $_REQUEST['id'];
+if (isset($_GET['id'])) {
+    $application = new vehicleParkingApplication();
+    $data = $application->getVParking($id);
+    $input['name'] = $data['name'];
+    $input['carnumber'] = $data['carnumber'];
+    $input['carmodel'] = $data['carmodel'];
+    $input['fareperday'] = $data['fareperday'];
+    $input['noofdays'] = $data['noofdays'];
+    $input['noofcars'] = $data['noofcars'];
+}
+
+if ($_POST) {
+    //   $parking = new VehicleParking();
+    $application = new vehicleParkingApplication();
+    $response = $application->validateVehicleParking($_POST);
+    if ($response['status']) {
+        $updateResponse = $application->updateVehicleParking($_POST);
     }
-
-    if (is_null($id)) {
-        header("Location: Index.php");
-    }
-
-
- class updateData
- {
-    
-    private $pdo;
-
-    public function __construct()
-    {
-        $this->pdo = Database::connect();
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    }
-
-    function getVParking($id)
-    {
-        $this->pdo = Database::connect();
-        
-        $sql = "SELECT * FROM VehicleParking where id = ?";
-        $q = $this->pdo->prepare($sql);
-        $q->execute(array($id));
-        $data = $q->fetch(PDO::FETCH_ASSOC);  
-        return $data;  
-    }
-   
-    function updateVehicleParking($inputdata)
-    {
-        $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
-        $q = $this->pdo->prepare($sql);
-        $total = calculateTotal($inputdata['fareperday'],$inputdata['noofdays'],$inputdata['noofcars']);
-        $q->execute(array($inputdata['name'],$inputdata['carnumber'],$inputdata['carmodel'],$inputdata['fareperday'],$inputdata['noofdays'],$inputdata['noofcars'],$total,$inputdata['id']));
-        return true;
-    }
- }
-
-    $update = new updateData();
-    if(isset($_GET['id'])){
-        $data = $update->getVParking($id);
-        $input['name'] = $data['name'];
-        $input['carnumber'] = $data['carnumber'];
-        $input['carmodel'] = $data['carmodel'];
-        $input['fareperday'] = $data['fareperday'];
-        $input['noofdays'] = $data['noofdays'];
-        $input['noofcars'] = $data['noofcars'];
-    }
-
-    if($_POST){
-        $parking = new VehicleParking();
-       $response = $parking->validateVehicleParking($_POST);
-       if($response['status']){
-          $updateResponse=$update->updateVehicleParking($_POST);
-       }
-       header("Location:Index.php");
-   }
-?>
+    header("Location:Index.php");
+}
+?> 
 
 <html>
 <body>
@@ -168,11 +132,3 @@ require 'total_calculation.php';
     
 </body>
 </html>
-
-
-
-
-
-
-
-
