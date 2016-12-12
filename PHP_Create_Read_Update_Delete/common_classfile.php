@@ -72,7 +72,7 @@ class vehicleParkingApplication
         $sql   = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
         $q = $pdo->prepare($sql);
         $total = calculateTotal($fareperday, $noofdays, $noofcars);
-        $q->execute(array(
+        $state = $q->execute(array(
             $inputData['name'],
             $inputData['carnumber'],
             $inputData['carmodel'],
@@ -81,8 +81,13 @@ class vehicleParkingApplication
             $inputData['noofcars'],
             $total
         ));
+        if($state) {
+            echo 'Query successful';
+        } else {
+            echo "Query failed";
+        }
         Database::disconnect();
-        return true;
+      //  return true;
         
     }
     
@@ -91,7 +96,7 @@ class vehicleParkingApplication
     {
         // delete data
         $this->pdo = Database::connect();
-        $sql = "DELETE FROM VehicleParking  WHERE id = ?";
+        $sql = "DELETE FROM  WHERE id = ?";
         $q = $this->pdo->prepare($sql);
         $q->execute(array(
             $id
