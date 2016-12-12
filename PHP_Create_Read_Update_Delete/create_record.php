@@ -1,20 +1,17 @@
 <?php
 ob_start();
 require 'common_classfile.php';
-if(isset($_POST)){
-  $application = new  vehicleParkingApplication();
-  $response = $application->validateVehicleParking($_POST);
-  if($response['status']){
-    $resp = $application->insertVehicleParking($_POST);
-    if($resp) header("Location:Ind1.php");
-  }
-
-} 
-
-
- /** Insert data*/
-
- ?>
+if (isset($_POST)) {
+    $application = new vehicleParkingApplication();
+    $response = $application->validateVehicleParking($_POST);
+    if ($response['status']) {
+        $resp = $application->insertVehicleParking($_POST);
+        if ($resp)
+            header("Location:Index.php");
+    }
+    
+}
+?> 
 <html>
 <head>
  <h3 style="color:maroon">Ticket Calculation for Vehicle Parking:Insert values</h3>
@@ -43,7 +40,7 @@ if(isset($_POST)){
         background-color:#F5DEB3;} 
 </style>
 
- <form  action="cre1.php" method="post">
+ <form  action="create_record.php" method="post">
   <div class=" <?php echo !empty($response['messageList']['name'])?'error':'';?>">
      <table>
      <tr>
@@ -111,7 +108,7 @@ if(isset($_POST)){
      </form>
       <div class="form-actions">
     <button class="button" type="submit">Create</button>
-    <a class="button button2" href="Ind1.php">Back</a>
+    <a class="button button2" href="Index.php">Back</a>
     </div>
 </body>
 </html>
