@@ -69,6 +69,7 @@ class vehicleParkingApplication
         $noofdays = $inputData['noofdays'];
         $noofcars = $inputData['noofcars'];
         
+        try{
         $sql   = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
         $q = $pdo->prepare($sql);
         $total = calculateTotal($fareperday, $noofdays, $noofcars);
@@ -81,11 +82,10 @@ class vehicleParkingApplication
             $inputData['noofcars'],
             $total
         ));
-        if($state) {
-            echo 'Query successful';
-        } else {
-            echo "Query failed";
-        }
+        echo "Successful";
+    }catch (PDOException $e) {
+     echo "The user could not be added.<br>".$e->getMessage();
+    }
         Database::disconnect();
       //  return true;
         
