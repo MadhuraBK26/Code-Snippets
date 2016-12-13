@@ -71,7 +71,7 @@ class vehicleParkingApplication
         
        try
        {
-        $sql  = "INSERT INTO yy VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
+        $sql  = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
         $q = $pdo->prepare($sql);
         $total = calculateTotal($fareperday, $noofdays, $noofcars);
         $state = $q->execute(array(
@@ -83,47 +83,36 @@ class vehicleParkingApplication
             $inputData['noofcars'],
             $total
         ));
-        
         echo "Successful";
-
-         } catch (PDOException $e) {
-             $_SESSION['error']="The record could not be added.<br>" .$e->getMessage();
-          //  if(true)
-           // {
-          //   $_SESSION['error']="Error";
-              header("Location:Index.php");
-        //  }
-             //  echo "The record could not be added.<br>".$e->getMessage();
-       }
-
-
-           
-        Database::disconnect();
-      //  return true;
+        } catch (PDOException $e) {
+             $_SESSION['error'] = "The record could not be added.<br>" .$e->getMessage();
+             header("Location:Index.php");
+        }
+             Database::disconnect();
     }
     
     /**function for deleting values*/
     public function deleteVehicleParking($id)
     {
         // delete data
-        $this->pdo = Database::connect();
+       $this->pdo = Database::connect();
         try {
-        $sql = "DELETE FROM y WHERE id = ?";
+        $sql = "DELETE FROM VehicleParking WHERE id = ?";
         $q = $this->pdo->prepare($sql);
         $q->execute(array(
             $id
         ));
          echo "Successful";
          } catch (PDOException $e) {
-            $_SESSION['error']="The record could not deleted.<br>" .$e->getMessage();
-            header("Location:Index.php"); 
-        //  echo "The record could not be deleted.<br>".$e->getMessage();
+             $_SESSION['error']="The record could not deleted.<br>" .$e->getMessage();
+             header("Location:Index.php"); 
+    
        }
         Database::disconnect();
     }
     
     
-    /** function for reading values*/
+    /** function for reading values */
     function getVParking($id)
     {
         $this->pdo = Database::connect();
