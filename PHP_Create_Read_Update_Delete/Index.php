@@ -1,5 +1,11 @@
 <?php 
+session_start();
 include 'database.php';
+
+if(isset($_SESSION['error'])) {
+     echo $_SESSION['error'];
+     unset($_SESSION['error']);
+}
 ?>
 <html>
 </head>
@@ -46,18 +52,19 @@ h3 {
     echo '<td>'. $VehicleParkingrow['noofcars'] . '</td>';
     echo '<td>'. $VehicleParkingrow['totalamount'] . '</td>';
     echo '<td width=250>';
-    echo '<a class="button" href="View_record.php?id='.$row['id'].'">Read</a>';
+    echo '<a class="button" href="View_record.php?id='.$VehicleParkingrow['id'].'">Read</a>';
     echo ' ';
-    echo '<a  href="update.php?id='.$row['id'].'">Update</a>';
+    echo '<a  href="update.php?id='.$VehicleParkingrow['id'].'">Update</a>';
     echo ' ';
-    echo '<a class="button" href="delete.php?id='.$row['id'].'">Delete</a>';
+    echo '<a class="button" href="delete.php?id='.$VehicleParkingrow['id'].'">Delete</a>';
     echo '</td>';
     echo '</tr>';
     }
-     Database::disconnect();
-  ?>
+?>
 </tbody>
 </table>
 <br>
  <a href="create_record.php">Create a new Vehicle Parking slot</a><br>
 </html>
+
+
