@@ -1,5 +1,6 @@
- <?php
+<?php
 session_start();
+ob_start();
 require 'total_calculation.php';
 require 'database.php';
 
@@ -12,6 +13,7 @@ class vehicleParkingApplication
     public function __construct()
     {
         $this->response = $response;
+         $this->response1 = $response1;
         $this->pdo = Database::connect();
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
@@ -53,12 +55,59 @@ class vehicleParkingApplication
                 $errorArray['noofcars'] = 'Please enter number of cars in proper format';
                 $valid = false;
             }
+   
+        /*     if (empty($POSTArray['locationname'])) {
+                $errorArray['locationname'] = 'Please enter location in proper format';
+                $valid = false;
+            }
+
+             if (empty($POSTArray['ownername'])) {
+                $errorArray['ownername'] = 'Please enter number of cars in proper format';
+                $valid = false;
+            }
+
+             if (empty($POSTArray['price'])) {
+                $errorArray['price'] = 'Please enter number of cars in proper format';
+                $valid = false;
+            }*/
+
+
             
             $response['messageList'] = $errorArray;
             $response['status'] = $valid;
             return $response;
         }
     }
+
+
+ public function validateParkingLocation($POSTLocation)
+    {
+         $valid1 = false;
+        if (!empty($POSTLocation)) {
+            $valid = true;
+
+         if (empty($POSTLocation['locationname'])) {
+                $errorArray1['locationname'] = 'Please enter location in proper format';
+                $valid1 = false;
+            }
+
+             if (empty($POSTLocation['ownername'])) {
+                $errorArray1['ownername'] = 'Please enter number of cars in proper format';
+                $valid1 = false;
+            }
+
+             if (empty($POSTLocation['price'])) {
+                $errorArray1['price'] = 'Please enter number of cars in proper format';
+                $valid1 = false;
+            }
+
+             $response1['messageList1'] = $errorArray1;
+            $response1['status1'] = $valid1;
+            return $response1;
+        }
+    }
+
+
     
     /**function for inserting values*/
     public function insertVehicleParking($inputData)
@@ -68,7 +117,7 @@ class vehicleParkingApplication
         $fareperday = $inputData['fareperday'];
         $noofdays = $inputData['noofdays'];
         $noofcars = $inputData['noofcars'];
-        
+      
        try
        {
         $sql  = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
@@ -90,6 +139,37 @@ class vehicleParkingApplication
         }
              Database::disconnect();
     }
+
+
+     public function insertParkingLocation($inputData)
+    {
+       
+        $pdo = Database::connect();
+        $locationname = $inputData['locationname'];
+        $ownername = $inputData['ownername'];
+        $price = $inputData['price'];
+      
+       try
+       {
+        $sql  = "INSERT INTO VehicleParkingLocation (Location_name,Owner_name,price) values(?, ?, ?)";
+        $q = $pdo->prepare($sql);
+        $total = calculateTotal($locationname, $ownername, $price);
+        $state = $q->execute(array(
+            $inputData['locationname'],
+            $inputData['ownername'],
+            $inputData['price']
+           
+        ));
+        echo "Successful";
+        } catch (PDOException $e) {
+             $_SESSION['error'] = "The record could not be added.<br>" .$e->getMessage();
+             header("Location:Location_create.php");
+        }
+             Database::disconnect();
+    }
+
+
+
     
     /**function for deleting values*/
     public function deleteVehicleParking($id)
