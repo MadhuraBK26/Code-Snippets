@@ -109,9 +109,12 @@ class vehicleParkingApplication
                 $valid1 = false;
             }
 
+             if (empty($POSTLocation['date'])) {
+                $errorArray1['date'] = 'Please enter number of cars in proper format';
+                $valid1 = false;
+            }
 
-
-             $response1['messageList1'] = $errorArray1;
+            $response1['messageList1'] = $errorArray1;
             $response1['status1'] = $valid1;
             return $response1;
         }
@@ -153,23 +156,22 @@ class vehicleParkingApplication
 
 
      public function insertParkingLocation($inputData)
-    {
+     {
        
         $pdo = Database::connect();
         $locationname = $inputData['locationname'];
         $ownername = $inputData['ownername'];
         $price = $inputData['price'];
-      
-       try
-       {
-        $sql  = "INSERT INTO VehicleParkingLocation (Location_name,Owner_name,price) values(?, ?, ?)";
+        $date = $inputData['date'];
+        try {
+        $sql  = "INSERT INTO VehicleParkingLocation (Location_name,Owner_name,price,Parking_date) values(?, ?, ?,?)";
         $q = $pdo->prepare($sql);
-        $total = calculateTotal($locationname, $ownername, $price);
+      //  $total = calculateTotal($locationname, $ownername, $price);
         $state = $q->execute(array(
             $inputData['locationname'],
             $inputData['ownername'],
-            $inputData['price']
-           
+            $inputData['price'],
+            $inputData['date']
         ));
         echo "Successful";
         } catch (PDOException $e) {
@@ -208,6 +210,8 @@ class vehicleParkingApplication
     {
         $this->pdo = Database::connect();
         $sql = "SELECT * FROM VehicleParking where id = ?";
+      
+
         $q = $this->pdo->prepare($sql);
         $q->execute(array(
             $id
@@ -223,7 +227,8 @@ class vehicleParkingApplication
         $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ?, Location_id = ? WHERE id = ?";
         $q = $this->pdo->prepare($sql);
         $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
-        $q->execute(array(
+       $q = $this->pdo->prepare($sql); 
+       $q->execute(array(
             $inputdata['name'],
             $inputdata['carnumber'],
             $inputdata['carmodel'],
@@ -241,5 +246,32 @@ class vehicleParkingApplication
         }
        // return true;
     }
+    
+    function combineTables($id)
+    {
+        $sqlcombine = "SELECT * FROM  VehicleParkingLocation,VehicleParking  WHERE VehicleParkingLocation .Location_id =VehicleParking .Location_id";
+        $q = $this->pdo->prepare($sqlcombine);
+         $q->execute(array(
+            $inputdata['name'],
+            $inputdata['carnumber'],
+            $inputdata['carmodel'],
+            $inputdata['fareperday'],
+            $inputdata['noofdays'],
+            $inputdata['noofcars'],
+            $total,
+            $id,
+            $inputdata['locationid'],
+            $inputData['locationname'],
+            $inputData['ownername'],
+            $inputData['price'],
+            $inputData['date']
+         ));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
+        return $data;
+        return true;
+
+    }
+
+
 }
 ?> 
