@@ -4,8 +4,11 @@ require 'common_classfile.php';
 if (isset($_POST)) {
     $application = new vehicleParkingApplication();
     $response = $application->validateVehicleParking($_POST);
+  //  print_r($response);
     if ($response['status']) {
+
         $resp = $application->insertVehicleParking($_POST);
+
         if ($resp)
             header("Location:Index.php");
     }
@@ -99,6 +102,23 @@ if (isset($_POST)) {
      <td>  <input name="noofcars" type="text"  placeholder="No of cars" value="<?php echo !empty($_POST['noofcars']) ?  ($_POST['noofcars']) : '';?>">
      <?php if (isset($response['messageList']['noofcars'])):?>
      <?php echo $response['messageList']['noofcars'];;?>
+     <?php endif;?>
+     </td>
+     </tr>
+     <tr>
+
+    <td><i> <label>Location id</label></td>
+     <td><select name ="locationid"  style="max-width:90%" placeholder="Location id" value="<?php echo !empty( $_POST['locationid']) ?  ($_POST['locationid']) : '';?>"  >
+     <option disabled selected value>Select</option>
+     <option value="1">1</option>
+     <option value="2">2</option>
+     <option value="3">3</option>
+     <option value="4">4</option>
+      <option value="5">5</option>
+
+     </select>
+     <?php if (isset($response['messageList']['locationid'])):?>
+     <?php echo $response['messageList']['locationid'];;?>
      <?php endif;?>
      </td>
      </tr>
