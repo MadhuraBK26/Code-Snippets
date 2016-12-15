@@ -55,6 +55,12 @@ class vehicleParkingApplication
                 $errorArray['noofcars'] = 'Please enter number of cars in proper format';
                 $valid = false;
             }
+
+             if (empty($POSTArray['locationid'])) {
+                $errorArray['locationid'] = 'Please enter number of cars in proper format';
+                $valid = false;
+            }
+
    
         /*     if (empty($POSTArray['locationname'])) {
                 $errorArray['locationname'] = 'Please enter location in proper format';
@@ -82,10 +88,12 @@ class vehicleParkingApplication
 
  public function validateParkingLocation($POSTLocation)
     {
-         $valid1 = false;
+       //  $valid1 = false;
+        var_dump($POSTLocation);
+       // exit;
         if (!empty($POSTLocation)) {
-            $valid = true;
-
+            $valid1 = true;
+           // print_r($valid1);exit;
          if (empty($POSTLocation['locationname'])) {
                 $errorArray1['locationname'] = 'Please enter location in proper format';
                 $valid1 = false;
@@ -100,6 +108,8 @@ class vehicleParkingApplication
                 $errorArray1['price'] = 'Please enter number of cars in proper format';
                 $valid1 = false;
             }
+
+
 
              $response1['messageList1'] = $errorArray1;
             $response1['status1'] = $valid1;
@@ -120,7 +130,7 @@ class vehicleParkingApplication
       
        try
        {
-        $sql  = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount) values(?, ?, ?, ?, ?, ?,?)";
+        $sql  = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount,Location_id) values(?, ?, ?, ?, ?, ?,?,?)";
         $q = $pdo->prepare($sql);
         $total = calculateTotal($fareperday, $noofdays, $noofcars);
         $state = $q->execute(array(
@@ -130,7 +140,8 @@ class vehicleParkingApplication
             $inputData['fareperday'],
             $inputData['noofdays'],
             $inputData['noofcars'],
-            $total
+            $total,
+            $inputData['locationid']
         ));
         echo "Successful";
         } catch (PDOException $e) {
@@ -208,7 +219,8 @@ class vehicleParkingApplication
     
     function updateVehicleParking($inputdata)
     {
-        $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
+        try{
+        $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ?, Location_id = ? WHERE id = ?";
         $q = $this->pdo->prepare($sql);
         $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
         $q->execute(array(
@@ -219,9 +231,15 @@ class vehicleParkingApplication
             $inputdata['noofdays'],
             $inputdata['noofcars'],
             $total,
+            $inputdata['locationid'],
             $inputdata['id']
-        ));
-        return true;
+         ));
+            echo "Successful";
+        } catch (PDOException $e) {
+             $_SESSION['error'] = "The record could not be updated.<br>" .$e->getMessage();
+             header("Location:update.php");
+        }
+       // return true;
     }
 }
 ?> 
