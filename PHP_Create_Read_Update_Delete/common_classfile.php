@@ -89,7 +89,7 @@ class vehicleParkingApplication
  public function validateParkingLocation($POSTLocation)
     {
        //  $valid1 = false;
-        var_dump($POSTLocation);
+       // var_dump($POSTLocation);
        // exit;
         if (!empty($POSTLocation)) {
             $valid1 = true;
@@ -223,6 +223,7 @@ class vehicleParkingApplication
     
     function updateVehicleParking($inputdata)
     {
+
         try{
         $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ?, Location_id = ? WHERE id = ?";
         $q = $this->pdo->prepare($sql);
@@ -247,31 +248,57 @@ class vehicleParkingApplication
        // return true;
     }
     
-    function combineTables($id)
+    function readCombinedTables($locationid)
     {
+         $this->pdo = Database::connect();
+        try {
         $sqlcombine = "SELECT * FROM  VehicleParkingLocation,VehicleParking  WHERE VehicleParkingLocation .Location_id =VehicleParking .Location_id";
         $q = $this->pdo->prepare($sqlcombine);
          $q->execute(array(
-            $inputdata['name'],
+           /* $inputdata['name'],
             $inputdata['carnumber'],
             $inputdata['carmodel'],
             $inputdata['fareperday'],
             $inputdata['noofdays'],
             $inputdata['noofcars'],
-            $total,
-            $id,
-            $inputdata['locationid'],
+            $total,*/
+           // $id,
+            $locationid
+          /*  $inputdata['locationid'],
             $inputData['locationname'],
             $inputData['ownername'],
             $inputData['price'],
-            $inputData['date']
+            $inputData['date']*/
          ));
+         echo "Successful";
         $data = $q->fetch(PDO::FETCH_ASSOC);
         return $data;
-        return true;
-
+       // return true;
+         } catch (PDOException $e) {
+             $_SESSION['error']="The record could not deleted.<br>" .$e->getMessage();
+             header("Location:Index.php"); 
+           }
     }
 
+      function deleteCombinedTables($locationid)
+      {
+        $this->pdo = Database::connect();
+        try {
+        $sql = "DELETE VehicleParkingLocation,VehicleParking FROM VehicleParkingLocation,VehicleParking  WHERE VehicleParkingLocation .Location_id =VehicleParking .Location_id";
+        $q = $this->pdo->prepare($sql);
+        $q->execute(array(
+            $locationid
+        ));
+         echo "Successful";
+         } catch (PDOException $e) {
+             $_SESSION['error']="The record could not deleted.<br>" .$e->getMessage();
+             header("Location:Index.php"); 
+    
+       }
+        Database::disconnect();
+    }
+
+      
 
 }
 ?> 
