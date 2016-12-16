@@ -1,11 +1,15 @@
 <?php 
 session_start();
-include 'database.php';
-
+//include 'database.php';
+require('common_classfile.php');
 if(isset($_SESSION['error'])) {
      echo $_SESSION['error'];
      unset($_SESSION['error']);
 }
+
+$clsObj = new vehicleParkingApplication();
+$data = $clsObj->joinTables();
+
 ?>
 <html>
 </head>
@@ -32,6 +36,7 @@ h3 {
       <td bgcolor="mistyrose"><b>No of days</th>
       <td bgcolor="mistyrose"><b>No of cars</th>
       <td bgcolor="mistyrose"><b>Total amount</th>
+       <td bgcolor="mistyrose"><b>Location</th>
       <td bgcolor="mistyrose"><b>Action</th>
       <th></th>
       </tr>
@@ -39,8 +44,8 @@ h3 {
   <tbody>
 
   <?php
-   
-    $pdo = Database::connect();
+    
+  /*  $pdo = Database::connect();
     $sql = 'SELECT * FROM VehicleParking ORDER BY id DESC';
     foreach ($pdo->query($sql) as $VehicleParkingrow) {
     echo '<tr>';
@@ -51,6 +56,7 @@ h3 {
     echo '<td>'. $VehicleParkingrow['noofdays'] . '</td>';
     echo '<td>'. $VehicleParkingrow['noofcars'] . '</td>';
     echo '<td>'. $VehicleParkingrow['totalamount'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['Location_id'] . '</td>';
     echo '<td width=250>';
     echo '<a class="button" href="View_record.php?id='.$VehicleParkingrow['id'].'">Read</a>';
     echo ' ';
@@ -59,12 +65,34 @@ h3 {
     echo '<a class="button" href="delete.php?id='.$VehicleParkingrow['id'].'">Delete</a>';
     echo '</td>';
     echo '</tr>';
-    }
+    }*/
+  
+
+    foreach ($data as $VehicleParkingrow) {
+    echo '<tr>';
+    echo '<td>'. $VehicleParkingrow['name'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['carnumber'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['carmodel'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['fareperday'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['noofdays'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['noofcars'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['totalamount'] . '</td>';
+    echo '<td>'. $VehicleParkingrow['Location_name'] . '</td>';
+    echo '<td width=250>';
+    echo '<a class="button" href="View_record.php?id='.$VehicleParkingrow['id'].'">Read</a>';
+    echo ' ';
+    echo '<a  href="update.php?id='.$VehicleParkingrow['id'].'">Update</a>';
+    echo ' ';
+    echo '<a class="button" href="delete.php?id='.$VehicleParkingrow['id'].'">Delete</a>';
+    echo '</td>';
+    echo '</tr>';
+  }
+
 ?>
 </tbody>
 </table>
 <br>
  <a href="create_record.php">Create a new Vehicle Parking slot</a><br>
+  <a href="Location_create.php">Create  Parking location</a><br>
 </html>
-
 
