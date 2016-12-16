@@ -123,6 +123,25 @@ if ($_POST) {
      </td>
      </tr>
      <tr>
+
+     <td><i> <label>Location id</label></td>
+      <td><select name ="locationid" >
+     <option disabled selected value>Select</option>
+     <?php
+       $pdo = new PDO('mysql:host=localhost;dbname=ticketCalculation', 'root', 'compass');
+       $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation";
+      // $sql = $pdo->query("SELECT Location_name FROM VehicleParkingLocation");
+        $q = $pdo->prepare($sql);
+        $q->execute();
+        while ($data = $q->fetch(PDO::FETCH_ASSOC)){
+         echo "<option value='" .$data['Location_id']."'>" .$data['Location_name']."</option>";  
+        } 
+        
+     
+     ?>
+
+     </select>
+
      </table>
     <div class="form-actions">
     <input class="button" type="submit" name="submit" value="Submit" />
