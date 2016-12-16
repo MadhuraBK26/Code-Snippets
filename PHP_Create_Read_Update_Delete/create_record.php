@@ -107,14 +107,22 @@ if (isset($_POST)) {
      </tr>
      <tr>
 
-    <td><i> <label>Location id</label></td>
-     <td><select name ="locationid"  style="max-width:90%" placeholder="Location id" value="<?php echo !empty( $_POST['locationid']) ?  ($_POST['locationid']) : '';?>"  >
+    <td><i> <label>Location name</label></td>
+     <td><select name ="locationid" >
      <option disabled selected value>Select</option>
-     <option value="1">1</option>
-     <option value="2">2</option>
-     <option value="3">3</option>
-     <option value="4">4</option>
-      <option value="5">5</option>
+     <?php
+    // $pdo = Database::connect();
+       $pdo = new PDO('mysql:host=localhost;dbname=ticketCalculation', 'root', 'compass');
+      // $sql ="SELECT Location_name FROM VehicleParkingLocation";
+       $sql = $pdo->query("SELECT Location_name FROM VehicleParkingLocation");
+      //  $q = $pdo->prepare($sql);
+        // $q->execute();
+        while ($data = $sql->fetch(PDO::FETCH_ASSOC)){
+         echo "<option value='" .$data['Location_name']."'></option>";  
+        } 
+         //return $data;
+     
+     ?>
 
      </select>
      <?php if (isset($response['messageList']['locationid'])):?>
