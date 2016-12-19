@@ -1,6 +1,6 @@
 <?php
-session_start();
 ob_start();
+session_start();
 require 'total_calculation.php';
 require 'database.php';
 
@@ -13,29 +13,30 @@ class vehicleParkingApplication
     public function __construct()
     {
         $this->response = $response;
-         $this->response1 = $response1;
+        $this->response1 = $response1;
         $this->pdo = Database::connect();
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
     
     public function joinTables()
-      {
+    {
         $this->pdo = Database::connect();
         try {
-            $sql =  "SELECT * FROM VehicleParking t1 LEFT JOIN VehicleParkingLocation t2 ON t1.Location_id = t2.Location_id" ;
-            $q = $this->pdo->prepare($sql);
+            $sql = "SELECT * FROM VehicleParking t1 LEFT JOIN VehicleParkingLocation t2 ON t1.Location_id = t2.Location_id";
+            $q   = $this->pdo->prepare($sql);
             $q->execute();
             $data = $q->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-             $_SESSION['error'] = "The record could not be updated.<br>" .$e->getMessage();
         }
-       return $data;
+        catch (PDOException $e) {
+            $_SESSION['error'] = "The record could not be updated.<br>" . $e->getMessage();
+        }
+        return $data;
     }
-
+    
     /** function for validation*/
     public function validateVehicleParking($POSTArray)
     {
-        $valid = false;
+       // $valid = false;
         if (!empty($POSTArray)) {
             $valid = true;
             
@@ -69,152 +70,137 @@ class vehicleParkingApplication
                 $errorArray['noofcars'] = 'Please enter number of cars in proper format';
                 $valid = false;
             }
-
-             if (empty($POSTArray['locationid'])) {
+            
+           /* if (empty($POSTArray['locationid'])) {
                 $errorArray['locationid'] = 'Please enter Location name in proper format';
-                $valid = false;
-            }
-
-   
-        /*     if (empty($POSTArray['locationname'])) {
-                $errorArray['locationname'] = 'Please enter location in proper format';
-                $valid = false;
-            }
-
-             if (empty($POSTArray['ownername'])) {
-                $errorArray['ownername'] = 'Please enter number of cars in proper format';
-                $valid = false;
-            }
-
-             if (empty($POSTArray['price'])) {
-                $errorArray['price'] = 'Please enter number of cars in proper format';
-                $valid = false;
+                $valid                    = false;
             }*/
-
-
             
             $response['messageList'] = $errorArray;
-            $response['status'] = $valid;
+            $response['status']      = $valid;
             return $response;
         }
     }
-
-
- public function validateParkingLocation($POSTLocation)
+    
+    
+    public function validateParkingLocation($POSTLocation)
     {
-       //  $valid1 = false;
-       // var_dump($POSTLocation);
-       // exit;
+        //  $valid1 = false;
+        // var_dump($POSTLocation);
+        // exit;
         if (!empty($POSTLocation)) {
             $valid1 = true;
-           // print_r($valid1);exit;
-         if (empty($POSTLocation['locationname'])) {
+            // print_r($valid1);exit;
+            if (empty($POSTLocation['locationname'])) {
                 $errorArray1['locationname'] = 'Please enter location in proper format';
                 $valid1 = false;
             }
-
-             if (empty($POSTLocation['ownername'])) {
+            
+            if (empty($POSTLocation['ownername'])) {
                 $errorArray1['ownername'] = 'Please enter number of ownername in proper format';
                 $valid1 = false;
             }
-
-             if (empty($POSTLocation['price'])) {
+            
+            if (empty($POSTLocation['price'])) {
                 $errorArray1['price'] = 'Please enter number of price in proper format';
                 $valid1 = false;
             }
-
-             if (empty($POSTLocation['date'])) {
+            
+            if (empty($POSTLocation['date'])) {
                 $errorArray1['date'] = 'Please enter date in proper format';
                 $valid1 = false;
             }
-
+            
             $response1['messageList1'] = $errorArray1;
             $response1['status1'] = $valid1;
             return $response1;
         }
     }
-
-
+    
+    
     
     /**function for inserting values*/
     public function insertVehicleParking($inputData)
     {
-       
+        
         $pdo = Database::connect();
         $fareperday = $inputData['fareperday'];
         $noofdays = $inputData['noofdays'];
         $noofcars = $inputData['noofcars'];
-      
-       try
-       {
-        $sql  = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount,Location_id) values(?, ?, ?, ?, ?, ?,?,?)";
-        $q = $pdo->prepare($sql);
-        $total = calculateTotal($fareperday, $noofdays, $noofcars);
-        $state = $q->execute(array(
-            $inputData['name'],
-            $inputData['carnumber'],
-            $inputData['carmodel'],
-            $inputData['fareperday'],
-            $inputData['noofdays'],
-            $inputData['noofcars'],
-            $total,
-            $inputData['locationid']
-        ));
-        echo "Successful";
-        } catch (PDOException $e) {
-             $_SESSION['error'] = "The record could not be added.<br>" .$e->getMessage();
-             header("Location:Index.php");
+        
+        try {
+            $sql = "INSERT INTO VehicleParking (name,carnumber,carmodel,fareperday,noofdays,noofcars,totalamount,Location_id) values(?, ?, ?, ?, ?, ?,?,?)";
+            $q = $pdo->prepare($sql);
+            $total = calculateTotal($fareperday, $noofdays, $noofcars);
+            $state = $q->execute(array(
+                $inputData['name'],
+                $inputData['carnumber'],
+                $inputData['carmodel'],
+                $inputData['fareperday'],
+                $inputData['noofdays'],
+                $inputData['noofcars'],
+                $total,
+                $inputData['locationid']
+            ));
+            echo "Successful";
         }
-             Database::disconnect();
+        catch (PDOException $e) {
+            $_SESSION['error'] = "The record could not be added.<br>" . $e->getMessage();
+            header("Location:Index.php");
+        }
+        Database::disconnect();
     }
-
-
-     public function insertParkingLocation($inputData)
-     {
-       
+    
+    
+    public function insertParkingLocation($inputData)
+    {
+        
         $pdo = Database::connect();
         $locationname = $inputData['locationname'];
         $ownername = $inputData['ownername'];
         $price = $inputData['price'];
         $date = $inputData['date'];
         try {
-        $sql  = "INSERT INTO VehicleParkingLocation (Location_name,Owner_name,price,Parking_date) values(?, ?, ?,?)";
-        $q = $pdo->prepare($sql);
-      //  $total = calculateTotal($locationname, $ownername, $price);
-        $state = $q->execute(array(
-            $inputData['locationname'],
-            $inputData['ownername'],
-            $inputData['price'],
-            $inputData['date']
-        ));
-        echo "Successful";
-        } catch (PDOException $e) {
-             $_SESSION['error'] = "The record could not be added.<br>" .$e->getMessage();
-             header("Location:Location_create.php");
+            $sql = "INSERT INTO VehicleParkingLocation (Location_name,Owner_name,price,Parking_date) values(?, ?, ?,?)";
+            $q = $pdo->prepare($sql);
+            //  $total = calculateTotal($locationname, $ownername, $price);
+            $state = $q->execute(array(
+                $inputData['locationname'],
+                $inputData['ownername'],
+                $inputData['price'],
+                $inputData['date']
+            ));
+            echo "Successful";
         }
-             Database::disconnect();
+        catch (PDOException $e) {
+            $_SESSION['error'] = "The record could not be added.<br>" . $e->getMessage();
+            header("Location:Location_create.php");
+        }
+        Database::disconnect();
     }
-
-
-
+    
+    
+    
     
     /**function for deleting values*/
     public function deleteVehicleParking($id)
     {
         // delete data
-       $this->pdo = Database::connect();
+        $this->pdo = Database::connect();
         try {
-        $sql = "DELETE FROM VehicleParking WHERE id = ?";
-        $q = $this->pdo->prepare($sql);
-        $q->execute(array(
-            $id
-        ));
-         echo "Successful";
-         } catch (PDOException $e) {
-             $_SESSION['error']="The record could not deleted.<br>" .$e->getMessage();
-             header("Location:Index.php"); 
-    
-       }
+            $sql = "DELETE FROM VehicleParking WHERE id = ?";
+            $q = $this->pdo->prepare($sql);
+            $q->execute(array(
+                $id
+            ));
+            
+            echo "Successful";
+        }
+        catch (PDOException $e) {
+            $_SESSION['error'] = "The record could not deleted.<br>" . $e->getMessage();
+            header("Location:Index.php");
+            
+        }
         Database::disconnect();
     }
     
@@ -223,9 +209,10 @@ class vehicleParkingApplication
     function getVParking($id)
     {
         $this->pdo = Database::connect();
-        $sql = "SELECT * FROM VehicleParking where id = ?";
-      
-
+        $sql = "SELECT * FROM VehicleParking
+                JOIN VehicleParkingLocation ON  VehicleParking.Location_id =  VehicleParkingLocation.Location_id where   VehicleParking.id = ?";
+        
+        
         $q = $this->pdo->prepare($sql);
         $q->execute(array(
             $id
@@ -237,119 +224,32 @@ class vehicleParkingApplication
     
     function updateVehicleParking($inputdata)
     {
-
-        try{
-        $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ?, Location_id = ? WHERE id = ?";
-        $q = $this->pdo->prepare($sql);
-        $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
-       $q = $this->pdo->prepare($sql); 
-       $q->execute(array(
-            $inputdata['name'],
-            $inputdata['carnumber'],
-            $inputdata['carmodel'],
-            $inputdata['fareperday'],
-            $inputdata['noofdays'],
-            $inputdata['noofcars'],
-            $total,
-            $inputdata['locationid'],
-            $inputdata['id']
-         ));
+        
+        try {
+            $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
+            $q = $this->pdo->prepare($sql);
+            $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
+            $q = $this->pdo->prepare($sql);
+            $q->execute(array(
+                $inputdata['name'],
+                $inputdata['carnumber'],
+                $inputdata['carmodel'],
+                $inputdata['fareperday'],
+                $inputdata['noofdays'],
+                $inputdata['noofcars'],
+                $total,
+              //  $inputdata['locationid'],
+                $inputdata['id']
+            ));
             echo "Successful";
-        } catch (PDOException $e) {
-             $_SESSION['error'] = "The record could not be updated.<br>" .$e->getMessage();
-             header("Location:update.php");
         }
-       // return true;
+        catch (PDOException $e) {
+            $_SESSION['error'] = "The record could not be updated.<br>" . $e->getMessage();
+            header("Location:update.php");
+        }
+        // return true;
     }
     
-    function readCombinedTables($locationid)
-    {
-         $this->pdo = Database::connect();
-        try {
-
-             $sqlcombine = "SELECT * FROM  VehicleParkingLocation,VehicleParking  WHERE VehicleParkingLocation .Location_id =VehicleParking .Location_id";
-      //  $sqlcombine = "SELECT * FROM  VehicleParkingLocation vpl LEFT JOIN VehicleParking vp on vpl .Location_id =vp .Location_id where vpl .Location_id ={$Location_id}" ;
-        $q = $this->pdo->prepare($sqlcombine);
-         $q->execute(array(
-           /* $inputdata['name'],
-            $inputdata['carnumber'],
-            $inputdata['carmodel'],
-            $inputdata['fareperday'],
-            $inputdata['noofdays'],
-            $inputdata['noofcars'],
-            $total,*/
-           // $id,
-            $locationid
-          /*  $inputdata['locationid'],
-            $inputData['locationname'],
-            $inputData['ownername'],
-            $inputData['price'],
-            $inputData['date']*/
-         ));
-         echo "Successful";
-        $dataPLocation = $q->fetch(PDO::FETCH_ASSOC);
-        //echo "<pre>";print_r($data);exit;
-        return $dataPLocation;
-       // return true;
-         } catch (PDOException $e) {
-             $_SESSION['error']="The record could not be read.<br>" .$e->getMessage();
-             header("Location:Index.php"); 
-           }
-    }
-
-      function deleteCombinedTables($locationid)
-      {
-        $this->pdo = Database::connect();
-        try {
-        $sql = "DELETE VehicleParkingLocation,VehicleParking FROM VehicleParkingLocation,VehicleParking  WHERE VehicleParkingLocation .Location_id =VehicleParking .Location_id";
-        $q = $this->pdo->prepare($sql);
-        $q->execute(array(
-            $locationid
-        ));
-         echo "Successful";
-         } catch (PDOException $e) {
-             $_SESSION['error']="The record could not deleted.<br>" .$e->getMessage();
-             header("Location:Index.php"); 
     
-       }
-        Database::disconnect();
-    }
-
-  /*  function dynamicSelectValues()
-    {
-         $this->pdo = Database::connect();
-         $sql ="SELECT Location_name FROM VehicleParking";
-         $q = $this->pdo->prepare($sql);
-         $q->execute();
-         $data = $q->fetchAll(PDO::FETCH_ASSOC);
-         return $data;
-
-    }*/
-
-     function updateCombinedTables($inputData)
-      {
-        try{
-        $sql = "UPDATE VehicleParkingLocation  set Location_name = ?, Owner_name = ?, price = ?, Parking_date = ? WHERE Location_id = ?";
-             // $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
-       $q = $this->pdo->prepare($sql); 
-       $q->execute(array(
-            $inputdata['locationname'],
-            $inputdata['ownername'],
-            $inputdata['price'],
-            $inputdata['date'],
-            $inputdata['locationid'],
-         
-         ));
-            echo "Successful";
-        } catch (PDOException $e) {
-             $_SESSION['error'] = "The record could not be updated.<br>" .$e->getMessage();
-             header("Location:update.php");
-        }
-       // return true;
-    }
-
-      
-     
-
 }
 ?> 
