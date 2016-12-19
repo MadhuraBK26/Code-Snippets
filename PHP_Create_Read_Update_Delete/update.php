@@ -13,23 +13,49 @@ if (is_null($id)) {
 if (isset($_GET['id'])) {
     $application = new vehicleParkingApplication();
     $data = $application->getVParking($id);
+   
     $input['name'] = $data['name'];
     $input['carnumber'] = $data['carnumber'];
     $input['carmodel'] = $data['carmodel'];
     $input['fareperday'] = $data['fareperday'];
     $input['noofdays'] = $data['noofdays'];
     $input['noofcars'] = $data['noofcars'];
+    $input['location_id'] = $data['locationid'];
+    //echo "<pre>";print_r($input);exit;
+    
 }
 
 if ($_POST) {
     //   $parking = new VehicleParking();
     $application = new vehicleParkingApplication();
     $response = $application->validateVehicleParking($_POST);
-    if ($response['status']) {
+        if ($response['status']) {
         $updateResponse = $application->updateVehicleParking($_POST);
     }
-    header("Location:Index.php");
+        header("Location:Index.php");
 }
+
+//if (isset($_GET['locationid'])) {
+     $application = new vehicleParkingApplication();
+    $dataPLocation = $application->readCombinedTables($locationid);
+    $input['locationname'] = $dataPLocation['Location_name'];
+    $input['ownername'] = $dataPLocation['Owner_name'];
+    $input['price'] = $dataPLocation['price'];
+    $input['date'] = $dataPLocation['Parking_date'];
+    ;
+//}
+
+if ($_POST) {
+    //   $parking = new VehicleParking();
+    $application = new vehicleParkingApplication();
+    $response1 = $application->validateParkingLocation($_POST);
+   // print_r($response1);exit;
+        if ($response1['status1']) {
+        $updateResponse1 = $application->updateCombinedTables($_POST);
+    }
+        header("Location:Index.php");
+}
+
 ?> 
 
 <html>
@@ -128,21 +154,66 @@ if ($_POST) {
       <td><select name ="locationid" >
      <option disabled selected value>Select</option>
      <?php
+     //echo $input['location_id'] . "ssdf";exit;
        $pdo = new PDO('mysql:host=localhost;dbname=ticketCalculation', 'root', 'compass');
        $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation";
       // $sql = $pdo->query("SELECT Location_name FROM VehicleParkingLocation");
         $q = $pdo->prepare($sql);
         $q->execute();
+        while ($dataArray = $q->fetch(PDO::FETCH_ASSOC)){ ?>
+         <option value='<?php echo $dataArray['Location_id']?>' 
+         <?php if($dataArray['Location_id'] == $input['location_id']) echo "selected" ?> > <?php echo $dataArray['Location_name'] ?></option>;  
+       <?php } 
+        ?>
+     </select>
+
+
+        <td><i> <label>Location name</label></td>
+         <td><select name ="locationname" >
+     <option disabled selected value>Select</option>
+     <?php
+       $pdo = new PDO('mysql:host=localhost;dbname=ticketCalculation', 'root', 'compass');
+      // $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation where Location_id = {data['location_id']}";
+         $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation";
+     
+       //where VehicleParkingLocation .Location_id = VehicleParking .Location_id ";
+      // $sql = $pdo->query("SELECT Location_name FROM VehicleParkingLocation");
+       //echo $sql;exit;
+        $q = $pdo->prepare($sql);
+        $q->execute();
         while ($data = $q->fetch(PDO::FETCH_ASSOC)){
          echo "<option value='" .$data['Location_id']."'>" .$data['Location_name']."</option>";  
         } 
-        
-     
-     ?>
-
+        ?>
      </select>
 
-     </table>
+     
+     <?php if (isset($response1['messageList1']['locationname'])):?>
+     <?php echo $response1['messageList1']['locationname'];;?>
+     <?php endif;?>
+     </td>
+     </tr>
+     <tr>
+
+        <td><i> <label>Owner name</label></td>
+     <td>  <input name="ownername" type="text"  placeholder="No of cars" value="<?php echo !empty($input['ownername']) ?  ($input['ownername']) : '';?>">
+     <?php if (isset($response1['messageList1']['ownername'])):?>
+     <?php echo $response1['messageList1']['ownername'];;?>
+     <?php endif;?>
+     </td>
+     </tr>
+     <tr>
+
+        <td><i> <label>Price</label></td>
+     <td>  <input name="price" type="text"  placeholder="No of cars" value="<?php echo !empty($input['price']) ?  ($input['price']) : '';?>">
+     <?php if (isset($response1['messageList1']['price'])):?>
+     <?php echo $response1['messageList1']['price'];;?>
+     <?php endif;?>
+     </td>
+     </tr>
+     <tr>
+
+    </table>
     <div class="form-actions">
     <input class="button" type="submit" name="submit" value="Submit" />
     <a class="button button2" href="Index.php" <?php echo "Record updated"?>>Back</a>
