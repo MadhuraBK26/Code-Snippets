@@ -86,10 +86,16 @@ class vehicleParkingApplication
         if (!empty($POSTLocation)) {
             $valid1 = true;
            //  print_r($valid1);exit;
-           /* if (empty($POSTLocation['locationname'])) {
+            if (empty($POSTLocation['locationname'])) {
                 $errorArray1['locationname'] = 'Please enter location in proper format';
                 $valid1 = false;
+            }
+
+         /*   if (empty($POSTLocation['locationid'])) {
+                $errorArray1['locationid'] = 'Please enter location in proper format';
+                $valid1 = false;
             }*/
+
             
             if (empty($POSTLocation['ownername'])) {
                 $errorArray1['ownername'] = 'Please enter ownername in proper format';
@@ -223,7 +229,7 @@ class vehicleParkingApplication
         try {
             $sql = "UPDATE VehicleParking  set name = ?, carnumber = ?, carmodel = ?, fareperday = ?, noofdays = ?,noofcars = ?,totalamount = ? WHERE id = ?";
           //  $q = $this->pdo->prepare($sql);
-           // $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
+            $total = calculateTotal($inputdata['fareperday'], $inputdata['noofdays'], $inputdata['noofcars']);
             $q = $this->pdo->prepare($sql);
             $q->execute(array(
                 $inputdata['name'],
@@ -282,5 +288,25 @@ class vehicleParkingApplication
         }
         // return true;
     }
+
+/*    function deleteParkingLocation($id)
+    {
+       $this->pdo = Database::connect();
+        try {
+            $sql = "DELETE FROM VehicleParkingLocation WHERE Location_id = ?";
+            $q = $this->pdo->prepare($sql);
+            $q->execute(array(
+                $id
+            ));
+            
+            echo "Successful";
+        }
+        catch (PDOException $e) {
+            $_SESSION['error'] = "The record could not deleted.<br>" . $e->getMessage();
+            header("Location:Index.php");
+            
+        }
+        Database::disconnect(); 
+    }*/
 }
 ?> 
