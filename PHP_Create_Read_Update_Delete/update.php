@@ -12,51 +12,28 @@ if (is_null($id)) {
 
 if (isset($_GET['id'])) {
     $application = new vehicleParkingApplication();
-    $data = $application->getVParking($id);
+    $updateParkingData = $application->getVParking($id);
    
-    $input['name'] = $data['name'];
-    $input['carnumber'] = $data['carnumber'];
-    $input['carmodel'] = $data['carmodel'];
-    $input['fareperday'] = $data['fareperday'];
-    $input['noofdays'] = $data['noofdays'];
-    $input['noofcars'] = $data['noofcars'];
-    $input['location_id'] = $data['locationid'];
-    //echo "<pre>";print_r($input);exit;
-    
-}
+    $inputParking['name'] = $updateParkingData['name'];
+    $inputParking['carNumber'] = $updateParkingData['carnumber'];
+    $inputParking['carModel'] = $updateParkingData['carmodel'];
+    $inputParking['farePerDay'] = $updateParkingData['fareperday'];
+    $inputParking['noOfDays'] = $updateParkingData['noofdays'];
+    $inputParking['noOfCars'] = $updateParkingData['noofcars'];
+}   
+
 
 if ($_POST) {
-    //   $parking = new VehicleParking();
+
     $application = new vehicleParkingApplication();
-    $response = $application->validateVehicleParking($_POST);
-        if ($response['status']) {
-        $updateResponse = $application->updateVehicleParking($_POST);
-    }
-        header("Location:Index.php");
+    $parkingResponse = $application->validateVehicleParking($_POST);
+        if ($parkingResponse['status']) {
+              $updateResponse = $application->updateVehicleParking($_POST);
+        }
+         header("Location:Index.php");
 }
+?>
 
-//if (isset($_GET['locationid'])) {
-     $application = new vehicleParkingApplication();
-    $dataPLocation = $application->readCombinedTables($locationid);
-    $input['locationname'] = $dataPLocation['Location_name'];
-    $input['ownername'] = $dataPLocation['Owner_name'];
-    $input['price'] = $dataPLocation['price'];
-    $input['date'] = $dataPLocation['Parking_date'];
-    ;
-//}
-
-if ($_POST) {
-    //   $parking = new VehicleParking();
-    $application = new vehicleParkingApplication();
-    $response1 = $application->validateParkingLocation($_POST);
-   // print_r($response1);exit;
-        if ($response1['status1']) {
-        $updateResponse1 = $application->updateCombinedTables($_POST);
-    }
-        header("Location:Index.php");
-}
-
-?> 
 
 <html>
 <body>
@@ -91,17 +68,17 @@ if ($_POST) {
  <table>
      <tr>
      <td><i> <label>Name</label></td>
-     <td><input name="name" type="text"  placeholder="Name" value="<?php echo !empty ($input['name']) ? ($input['name']) : '';?>">
-     <?php if (isset($response['messageList']['name'])):?>
-     <?php echo $response['messageList']['name'];?>
+     <td><input name="name" type="text"  placeholder="Name" value="<?php echo !empty ($inputParking['name']) ? ($inputParking['name']) : '';?>">
+     <?php if (isset($parkingResponse['messageList']['name'])):?>
+     <?php echo $parkingResponse['messageList']['name'];?>
      <?php endif;?>
      </tr>
      <tr>
 
      <td><i> <label >Car Number</label></td>
-     <td><input name="carnumber" type="text" placeholder="Car number" value="<?php echo !empty ($input['carnumber'])? ($input['carnumber']): '';?>">
-     <?php if (isset($response['messageList']['carnumber'])):?>
-     <?php echo $response['messageList']['carnumber'];?>
+     <td><input name="carNumber" type="text" placeholder="Car number" value="<?php echo !empty ($inputParking['carNumber'])? ($inputParking['carNumber']): '';?>">
+     <?php if (isset($parkingResponse['messageList']['carNumber'])):?>
+     <?php echo $parkingResponse['messageList']['carNumber'];?>
      <?php endif;?>
      </td>
      </tr>
@@ -109,110 +86,48 @@ if ($_POST) {
 
   
      <td><i><label>Car Model</label></td>
-     <td>  <select name ="carmodel"  style="max-width:90%" placeholder="Car model" value="<?php echo !empty( $input['carmodel']) ?  ($input['carmodel']) : '';?>"  >
+     <td>  <select name ="carModel"  style="max-width:90%" placeholder="Car model" value="<?php echo !empty( $inputParking['carModel']) ?  ($inputParking['carModel']) : '';?>"  >
      <option disabled selected value>Select</option>
      <option value="Maruti">Maruti</option>
      <option value="Ford">Ford</option>
      <option value="Volvo">Volvo</option>
      <option value="Suzuki">Suzuki</option>
      </select>
-     <?php if (isset($response['messageList']['carmodel'])):?>
-     <?php echo $response['messageList']['carmodel'] ;?>
+     <?php if (isset($parkingResponse['messageList']['carModel'])):?>
+     <?php echo $parkingResponse['messageList']['carModel'] ;?>
      <?php endif;?>
      </td>
      </tr>
                       
      <tr>
      <td><i><label>Fare per day</label></td>
-     <td> <input name="fareperday" type="text"  placeholder="Fare per day" value="<?php echo !empty($input['fareperday']) ? ($input['fareperday']) : '';?>">
-     <?php if (isset($response['messageList']['fareperday'])):?>
-     <?php echo $response['messageList']['fareperday'];?>
+     <td> <input name="farePerDay" type="text"  placeholder="Fare per day" value="<?php echo !empty($inputParking['farePerDay']) ? ($inputParking['farePerDay']) : '';?>">
+     <?php if (isset($parkingResponse['messageList']['farePerDay'])):?>
+     <?php echo $parkingResponse['messageList']['farePerDay'];?>
      <?php endif;?>
      </td>
      </tr>
      <tr>
 
      <td><i><label>No of days</label></td>
-     <td> <input name="noofdays" type="text"  placeholder="No of days" value="<?php echo !empty($input['noofdays']) ?  ($input['noofdays']) : '';?>">
-     <?php if (isset($response['messageList']['noofdays'])):?>
-     <?php echo $response['messageList']['noofdays']; ?>
+     <td> <input name="noOfDays" type="text"  placeholder="No of days" value="<?php echo !empty($inputParking['noOfDays']) ?  ($inputParking['noOfDays']) : '';?>">
+     <?php if (isset($parkingResponse['messageList']['noOfDays'])):?>
+     <?php echo $parkingResponse['messageList']['noOfDays']; ?>
      <?php endif;?>
      </td>
      </tr>
      <tr>
 
      <td><i> <label>No of cars</label></td>
-     <td>  <input name="noofcars" type="text"  placeholder="No of cars" value="<?php echo !empty($input['noofcars']) ?  ($input['noofcars']) : '';?>">
-     <?php if (isset($response['messageList']['noofcars'])):?>
-     <?php echo $response['messageList']['noofcars'];;?>
+     <td>  <input name="noOfCars" type="text"  placeholder="No of cars" value="<?php echo !empty($inputParking['noOfCars']) ?  ($inputParking['noOfCars']) : '';?>">
+     <?php if (isset($parkingResponse['messageList']['noOfCars'])):?>
+     <?php echo $parkingResponse['messageList']['noOfCars'];;?>
      <?php endif;?>
      </td>
      </tr>
      <tr>
 
-     <td><i> <label>Location id</label></td>
-      <td><select name ="locationid" >
-     <option disabled selected value>Select</option>
-     <?php
-     //echo $input['location_id'] . "ssdf";exit;
-       $pdo = new PDO('mysql:host=localhost;dbname=ticketCalculation', 'root', 'compass');
-       $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation";
-      // $sql = $pdo->query("SELECT Location_name FROM VehicleParkingLocation");
-        $q = $pdo->prepare($sql);
-        $q->execute();
-        while ($dataArray = $q->fetch(PDO::FETCH_ASSOC)){ ?>
-         <option value='<?php echo $dataArray['Location_id']?>' 
-         <?php if($dataArray['Location_id'] == $input['location_id']) echo "selected" ?> > <?php echo $dataArray['Location_name'] ?></option>;  
-       <?php } 
-        ?>
-     </select>
-
-
-        <td><i> <label>Location name</label></td>
-         <td><select name ="locationname" >
-     <option disabled selected value>Select</option>
-     <?php
-       $pdo = new PDO('mysql:host=localhost;dbname=ticketCalculation', 'root', 'compass');
-      // $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation where Location_id = {data['location_id']}";
-         $sql ="SELECT Location_id, Location_name FROM VehicleParkingLocation";
-     
-       //where VehicleParkingLocation .Location_id = VehicleParking .Location_id ";
-      // $sql = $pdo->query("SELECT Location_name FROM VehicleParkingLocation");
-       //echo $sql;exit;
-        $q = $pdo->prepare($sql);
-        $q->execute();
-        while ($data = $q->fetch(PDO::FETCH_ASSOC)){
-         echo "<option value='" .$data['Location_id']."'>" .$data['Location_name']."</option>";  
-        } 
-        ?>
-     </select>
-
-     
-     <?php if (isset($response1['messageList1']['locationname'])):?>
-     <?php echo $response1['messageList1']['locationname'];;?>
-     <?php endif;?>
-     </td>
-     </tr>
-     <tr>
-
-        <td><i> <label>Owner name</label></td>
-     <td>  <input name="ownername" type="text"  placeholder="No of cars" value="<?php echo !empty($input['ownername']) ?  ($input['ownername']) : '';?>">
-     <?php if (isset($response1['messageList1']['ownername'])):?>
-     <?php echo $response1['messageList1']['ownername'];;?>
-     <?php endif;?>
-     </td>
-     </tr>
-     <tr>
-
-        <td><i> <label>Price</label></td>
-     <td>  <input name="price" type="text"  placeholder="No of cars" value="<?php echo !empty($input['price']) ?  ($input['price']) : '';?>">
-     <?php if (isset($response1['messageList1']['price'])):?>
-     <?php echo $response1['messageList1']['price'];;?>
-     <?php endif;?>
-     </td>
-     </tr>
-     <tr>
-
+    
     </table>
     <div class="form-actions">
     <input class="button" type="submit" name="submit" value="Submit" />
