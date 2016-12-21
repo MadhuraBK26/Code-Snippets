@@ -2,13 +2,13 @@
 session_start();
 //include 'database.php';
 require('common_classfile.php');
-if(isset($_SESSION['error'])) {
+if (isset($_SESSION['error'])) {
      echo $_SESSION['error'];
      unset($_SESSION['error']);
 }
 
-$clsObj = new vehicleParkingApplication();
-$data = $clsObj->joinTables();
+$application = new vehicleParkingApplication();
+$parkingData = $application->joinTables();
 
 ?>
 <html>
@@ -68,7 +68,7 @@ h3 {
     }*/
   
 
-    foreach ($data as $VehicleParkingrow) {
+    foreach ($parkingData as $VehicleParkingrow) {
     echo '<tr>';
     echo '<td>'. $VehicleParkingrow['name'] . '</td>';
     echo '<td>'. $VehicleParkingrow['carnumber'] . '</td>';
