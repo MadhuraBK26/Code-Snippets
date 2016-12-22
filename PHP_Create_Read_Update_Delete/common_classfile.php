@@ -78,30 +78,45 @@ class vehicleParkingApplication
     }*/
  public function validateVehicleParking($POSTParking)
  {
-
-    $error ="The fields must not be empty";
-    $required = array('name','carNumber','carModel','farePerDay','noOfDays','noOfCars');
+     $required = array('name','carNumber','carModel','farePerDay','noOfDays','noOfCars');
  
+     $error = array("name"=>"Name must not be empty","carNumber"=>"carnumber must not be empty","carModel"=>"Car model must not be empty","farePerDay"=>"Fare must not be empty","noOfDays"=>"Days must not be empty","noOfCars"=>"Cars must not be emty");
+  
 
- foreach($required as $field) {
-    if (!empty($POSTParking)) {
+     foreach($required as $field) {
+      if (!empty($POSTParking)) {
             $valid = true;
+    
+            /*  if (empty($POSTParking[$field[0]])){
+                    echo  $error['name']."<br>";
+                    $valid=false;
+                }*/
+    
+             if (empty($POSTParking[$field])){
+              // echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
+              /* echo  $error['name']."<br>";
+               echo  $error['carNumber']."<br>";
+               echo  $error['carModel']."<br>";
+               echo  $error['farePerDay']."<br>";
+               echo  $error['noOfDays']."<br>";
+               echo  $error['noOfCars']."<br>";*/
+               $valid=false;
+             //  break;
+           }
+            $parkingResponse['messageList'] = $error;
+            $parkingResponse['status'] = $valid;
+            return $parkingResponse;
             
-             if (empty($POSTParking[$field])) {
-               echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
-               // echo  ($error['name']);
-               // echo "error";
-                $valid=false;
-            }
-
             
+          
+        
         }
-         
+
+        
     }
   
     
 }
-
 
 
     
