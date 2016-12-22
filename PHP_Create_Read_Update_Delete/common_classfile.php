@@ -34,13 +34,13 @@ class vehicleParkingApplication
     }
     
     /** function for validation*/
-    public function validateVehicleParking($POSTParking)
+  /*  public function validateVehicleParking($POSTParking)
     {
        
         if (!empty($POSTParking)) {
             $valid = true;
             
-            /** keep track validation errors */
+            /** keep track validation errors 
             if (empty($POSTParking['name'])) {
                 $errorArray['name'] = 'Please enter Name in proper format';
                 $valid = false;
@@ -75,8 +75,40 @@ class vehicleParkingApplication
             $parkingResponse['status'] = $valid;
             return $parkingResponse;
         }
+    }*/
+ public function validateVehicleParking($POSTParking)
+ {
+
+    $error ="The fields must not be empty";
+    $required = array('name','carNumber','carModel','farePerDay','noOfDays','noOfCars');
+ 
+
+ foreach($required as $field) {
+    if (!empty($POSTParking)) {
+            $valid = true;
+            
+             if (empty($POSTParking[$field])) {
+               echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
+               // echo  ($error['name']);
+               // echo "error";
+                $valid=false;
+            }
+
+            
+        }
+         
     }
+  
     
+}
+
+
+
+    
+ 
+   
+  
+
     
     public function validateParkingLocation($POSTLocation)
     {
@@ -109,6 +141,8 @@ class vehicleParkingApplication
             return $locationResponse;
         }
     }
+
+
     
     
     
@@ -125,7 +159,7 @@ class vehicleParkingApplication
             $sqlParking = "INSERT INTO VehicleParking (name,carnumber,carmodel,farePerDay,noofdays,noofcars,totalamount,Location_id) values(?, ?, ?, ?, ?, ?,?,?)";
             $parkingQuery = $pdo->prepare($sqlParking);
             $total = calculateTotal($farePerDay, $noOfDays, $noOfCars);
-            $state = $parkingQuery->execute(array(
+            $parkingState = $parkingQuery->execute(array(
                 $inputParking['name'],
                 $inputParking['carNumber'],
                 $inputParking['carModel'],
@@ -157,7 +191,7 @@ class vehicleParkingApplication
             $sqlLocation = "INSERT INTO VehicleParkingLocation (Location_name,Owner_name,price,Parking_date) values(?, ?, ?,?)";
             $locationQuery = $pdo->prepare($sqlLocation);
             //  $total = calculateTotal($locationname, $ownername, $price);
-            $state = $locationQuery->execute(array(
+            $parkingState = $locationQuery->execute(array(
                 $inputLocation['locationName'],
                 $inputLocation['ownerName'],
                 $inputLocation['price'],
