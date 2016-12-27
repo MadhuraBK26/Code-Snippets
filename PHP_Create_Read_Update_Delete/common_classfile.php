@@ -75,75 +75,18 @@ class vehicleParkingApplication
             $parkingResponse['status'] = $valid;
             return $parkingResponse;
         }
-    }
- public function validateVehicleParking($POSTParking,$POSTLocation)
+    }*/
+ 
+
+public function validateVehicleParking($POSTParking, $formname)
  {
-     $required = array('name','carNumber','carModel','farePerDay','noOfDays','noOfCars','locationName','ownerName','price','date');
+
+     $required = array("location" => array("locationName", "ownerName","price","date"), "parking" => array("name", "carNumber","carModel","farePerDay","noOfDays","noOfCars"));
  
      $error = array("name"=>"Name must not be empty","carNumber"=>"carnumber must not be empty","carModel"=>"Car model must not be empty","farePerDay"=>"Fare must not be empty","noOfDays"=>"Days must not be empty","noOfCars"=>"Cars must not be emty","locationName"=>"Location can't be empty","ownerName"=>"Owner name cant be empty","price"=>"Price cant be empty","date"=>"Date cannot be empty");
   
 
-     foreach($required as $field) {
-      if (!empty($POSTParking)) {
-            $valid = true;
-    
-            
-    
-             if (empty($POSTParking[$field])){
-              // echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
-              
-               $valid=false;
-             //  break;
-           }
-            $parkingResponse['messageList'] = $error;
-            $parkingResponse['status'] = $valid;
-            return $parkingResponse;
-        }
-
-        
-    }
-
-    foreach($required as $field) {
-      if (!empty($POSTLocation)) {
-            $valid = true;
-    
-            /*  if (empty($POSTParking[$field[0]])){
-                    echo  $error['name']."<br>";
-                    $valid=false;
-                }
-    
-             if (empty($POSTLocation[$field])){
-              // echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
-              /* echo  $error['name']."<br>";
-               echo  $error['carNumber']."<br>";
-               echo  $error['carModel']."<br>";
-               echo  $error['farePerDay']."<br>";
-               echo  $error['noOfDays']."<br>";
-               echo  $error['noOfCars']."<br>";
-               $valid=false;
-             //  break;
-           }
-            $parkingResponse['messageList'] = $error;
-            $parkingResponse['status'] = $valid;
-            return $parkingResponse;
-        }
-
-        
-    }
-
-  
-    
-}*/
-
-
-public function validateVehicleParking($POSTParking)
- {
-     $required = array('name','carNumber','carModel','farePerDay','noOfDays','noOfCars','locationName','ownerName','price','date');
- 
-     $error = array("name"=>"Name must not be empty","carNumber"=>"carnumber must not be empty","carModel"=>"Car model must not be empty","farePerDay"=>"Fare must not be empty","noOfDays"=>"Days must not be empty","noOfCars"=>"Cars must not be emty","locationName"=>"Location can't be empty","ownerName"=>"Owner name cant be empty","price"=>"Price cant be empty","date"=>"Date cannot be empty");
-  
-
-     foreach($required as $field) {
+     foreach($required["parking"] as $field) {
       if (!empty($POSTParking)) {
             $valid = true;
     
@@ -159,6 +102,24 @@ public function validateVehicleParking($POSTParking)
 
         
     }
+
+    foreach($required["location"] as $field) {
+      if (!empty($POSTParking)) {
+            $valid = true;
+    
+             if (empty($POSTParking[$field])){
+              // echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
+               $valid=false;
+             //  break;
+           }
+            $parkingResponse['messageList'] = $error;
+            $parkingResponse['status'] = $valid;
+            return $parkingResponse;
+        }
+
+        
+    }
+
 
    }
 
@@ -217,7 +178,7 @@ public function validateVehicleParking($POSTParking)
         try {
             $sqlParking = "INSERT INTO VehicleParking (name,carnumber,carmodel,farePerDay,noofdays,noofcars,totalamount,Location_id) values(?, ?, ?, ?, ?, ?,?,?)";
             $parkingQuery = $pdo->prepare($sqlParking);
-            $total = calculateTotal($farePerDay, $noOfDays, $noOfCars);
+                $total = calculateTotal($farePerDay, $noOfDays, $noOfCars);
             $parkingState = $parkingQuery->execute(array(
                 $inputParking['name'],
                 $inputParking['carNumber'],
