@@ -84,44 +84,22 @@ public function validateVehicleParking($POSTParking, $formname)
      $required = array("location" => array("locationName", "ownerName","price","date"), "parking" => array("name", "carNumber","carModel","farePerDay","noOfDays","noOfCars"));
  
      $error = array("name"=>"Name must not be empty","carNumber"=>"carnumber must not be empty","carModel"=>"Car model must not be empty","farePerDay"=>"Fare must not be empty","noOfDays"=>"Days must not be empty","noOfCars"=>"Cars must not be emty","locationName"=>"Location can't be empty","ownerName"=>"Owner name cant be empty","price"=>"Price cant be empty","date"=>"Date cannot be empty");
-  
 
-     foreach($required["parking"] as $field) {
-      if (!empty($POSTParking)) {
-            $valid = true;
-    
-             if (empty($POSTParking[$field])){
-              // echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
-               $valid=false;
-             //  break;
-           }
-            $parkingResponse['messageList'] = $error;
-            $parkingResponse['status'] = $valid;
-            return $parkingResponse;
+    foreach($required[$formname] as $field) {
+        /* if (!empty($POSTParking)) {
+            $valid = true;*/
+
+        if (empty($POSTParking[$field])){
+            $errorArray[$field] = $error[$field];
+            $valid=false;
         }
-
-        
     }
+//}
+    $parkingResponse['status'] = $valid;
+    $parkingResponse['messageList'] = $errorArray;
+    return $parkingResponse;
 
-    foreach($required["location"] as $field) {
-      if (!empty($POSTParking)) {
-            $valid = true;
-    
-             if (empty($POSTParking[$field])){
-              // echo  $error.= "->" . ucwords(str_replace('_',' ',$field)) . "<br />";
-               $valid=false;
-             //  break;
-           }
-            $parkingResponse['messageList'] = $error;
-            $parkingResponse['status'] = $valid;
-            return $parkingResponse;
-        }
-
-        
-    }
-
-
-   }
+}
 
 
     
