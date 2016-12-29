@@ -26,7 +26,7 @@
         background-color:#F5DEB3;} 
 </style>
 
- <form  action="create_record.php" method="post">
+ <form  action="vehicleParkingController.php?act=createParking" method="post">
   <div class=" <?php echo !empty($parkingResponse['messageList']['name'])?'error':'';?>">
      <table>
      <tr>
@@ -115,7 +115,7 @@
      </form>
     <div class="form-actions">
     <button class="button" type="submit">Create</button>
-    <a class="button button2" href="Index.php">Back</a>
+    <a class="button button2" href="parkingIndex.php">Back</a>
     </div>
 </body>
 </html>
