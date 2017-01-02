@@ -78,29 +78,34 @@ class vehicleParkingApplication
     }*/
  
 
-public function validateVehicleParking($POSTParking, $formname)
- {
-
+    public function validateVehicleParking($POSTParking, $formname)
+    {
+    //echo "<pre>";print_r($POSTParking);exit;
      $required = array("location" => array("locationName", "ownerName","price","date"), "parking" => array("name", "carNumber","carModel","farePerDay","noOfDays","noOfCars"));
  
      $error = array("name"=>"Name must not be empty","carNumber"=>"carnumber must not be empty","carModel"=>"Car model must not be empty","farePerDay"=>"Fare must not be empty","noOfDays"=>"Days must not be empty","noOfCars"=>"Cars must not be emty","locationName"=>"Location can't be empty","ownerName"=>"Owner name cant be empty","price"=>"Price cant be empty","date"=>"Date cannot be empty");
-
+      //echo "<pre>";print_r($parkingResponse);exit;
+    // $valid = true;
     foreach($required[$formname] as $field) {
-        /* if (!empty($POSTParking)) {
-            $valid = true;*/
+
+       // echo  $field . "---" . $POSTParking[$field] .  "<br />";
+        if (!empty($POSTParking)) { 
+            $valid = true;        
 
         if (empty($POSTParking[$field])){
             $errorArray[$field] = $error[$field];
             $valid=false;
+            }
         }
     }
-//}
+
     $parkingResponse['status'] = $valid;
     $parkingResponse['messageList'] = $errorArray;
+    //echo "<pre>";print_r($parkingResponse);
+   // print_r($POSTParking);exit;
     return $parkingResponse;
 
 }
-
 
     
  
@@ -223,7 +228,7 @@ public function validateVehicleParking($POSTParking, $formname)
         }
         catch (PDOException $e) {
             $_SESSION['error'] = "The record could not deleted.<br>" . $e->getMessage();
-            header("Location:Index.php");
+            header("Location:parkingIndex.php");
             
         }
         Database::disconnect();
