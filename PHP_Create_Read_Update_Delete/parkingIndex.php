@@ -8,6 +8,30 @@ if (isset($_SESSION['error'])) {
     unset($_SESSION['error']);
 }
 
+$url = "http://localhost/new/vehicleParkingController.php?act=*";
+
+
+if(filter_var($url, FILTER_VALIDATE_URL) === FALSE)
+{
+        echo "Not valid";
+}else{
+        echo "VALID";
+}
+
+/*$handle = curl_init($url);
+curl_setopt($handle,  CURLOPT_RETURNTRANSFER, TRUE);
+
+/* Get the HTML or whatever is linked in $url. */
+//$response = curl_exec($handle);
+
+/* Check for 404 (file not found). */
+//$httpCode = curl_getinfo($handle, CURLINFO_HTTP_CODE);
+//if($httpCode == 404) {
+    /* Handle 404 here. 
+}
+
+curl_close($handle);*/
+
 //$application = new vehicleParkingApplication();
 //$parkingData = $application->joinTables();
 
