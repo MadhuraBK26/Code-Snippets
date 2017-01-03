@@ -136,7 +136,7 @@ class vehicleParkingController
         }
 
         if (is_null($id)) {
-            header("Location: Index.php");
+            header("Location:vehicleParkingController.php?act=parkingIndex");
         }
 
         if (isset($_GET['id'])) {
@@ -152,12 +152,13 @@ class vehicleParkingController
         }
 
         if ($_POST) {
-            $parkingResponse = $this->parkingModel->validateVehicleParking($_POST);
+            $parkingResponse = $this->parkingModel->validateVehicleParking($_POST,"parking");
             if ($parkingResponse['status']) {
                 $updateResponse = $this->parkingModel->updateVehicleParking($_POST);
+               // echo "<pre>";print_r($updateResponse);exit;
             }
-
-            header("Location:vehicleParkingController.php?act=parkingIndex");
+               // echo "<pre>";print_r($updateResponse);exit;
+            header("Location:vehicleParkingController.php?act=updateParkingView");
         }
     }
 
@@ -238,6 +239,13 @@ class vehicleParkingController
             header("Location:vehicleParkingController.php?act=updateLocationView");
         }
     }
+/*    function myException($exception) {
+  echo "<b>Exception:</b> " . $exception->getMessage();
+}
+
+set_exception_handler('myException');
+
+throw new Exception('Uncaught Exception occurred');*/
 }
 
 $parkingController = new vehicleParkingController();
